@@ -55,11 +55,26 @@ const profile = {
   }
 };
 
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        connectSrc: ["'self'", "https://"],
+        scriptSrc: ["'self'"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        imgSrc: ["'self'", "data:", "https://"],
+        fontSrc: ["'self'", "data:", "https://fonts.googleapis.com", "https://fonts.gstatic.com"]
+      }
+    }
+  })
+);
 app.use(express.json());
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN || "*"
+    origin: process.env.CORS_ORIGIN || "*",
+    methods: ["GET", "POST"],
+    credentials: true
   })
 );
 
@@ -78,10 +93,22 @@ app.get("/api/profile", (req, res) => {
   });
 });
 
+app.use((req, res) => {
+  res.status(404).json({
+    ok: false,
+    error: "Endpoint not found",
+    path: req.path,
+    method: req.method
+  });
+});
+
 if (process.env.NODE_ENV !== "production") {
   const port = process.env.PORT || 4000;
   app.listen(port, () => {
     console.log(`Backend running on http://localhost:${port}`);
+    console.log(`Available endpoints:`);
+    console.log(`  GET http://localhost:${port}/api/health`);
+    console.log(`  GET http://localhost:${port}/api/profile`);
   });
 }
 
