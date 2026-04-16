@@ -47,7 +47,7 @@ const fallbackProfile = {
     }
   ],
   quote:
-    "Gapailah cita-cita setinggi langit, lalu jadilah manfaat bagi diri sendiri dan orang lain.",
+    "Gapailah cita-cita hingga setinggi langit, sehingga kita dapat bermanfaat bagi diri kita dan orang lain.",
   quoteAuthor: "~Ragah. D. Wijaya",
   photoUrl: "/images/profile-placeholder.svg",
   cvUrl: "/cv-ragah-dirotama-wijaya.txt",
