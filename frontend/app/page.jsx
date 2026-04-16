@@ -8,9 +8,9 @@ import ProfileBoard from "../components/ProfileBoard";
 const fallbackProfile = {
   name: "Ragah Dirotama Wijaya",
   tagline:
-    "Full-stack Developer yang adaptif, progresif, dan berorientasi hasil untuk membangun produk digital modern.",
+    "Full-stack Developer adaptif dan progresif yang membangun produk digital modern dari ide hingga rilis.",
   about:
-    "Saya adalah siswa PPLG SMKN 1 Ciomas yang fokus mengeksekusi ide menjadi aplikasi nyata, dari antarmuka yang responsif sampai API yang stabil dan aman. Saya terbiasa berkolaborasi dengan AI tools untuk mempercepat delivery tanpa mengorbankan kualitas.",
+    "Saya adalah siswa PPLG SMKN 1 Ciomas yang berfokus mengeksekusi ide menjadi aplikasi nyata, mulai dari antarmuka yang responsif hingga API yang stabil dan aman. Saya terbiasa berkolaborasi dengan AI tools untuk mempercepat delivery tanpa mengorbankan kualitas.",
   stack: [
     "Frontend: React, Next.js, Tailwind CSS",
     "Backend: Node.js (Express), Laravel, Firebase",
@@ -27,11 +27,11 @@ const fallbackProfile = {
     },
     {
       title: "Execution Focus",
-      text: "Terbukti mampu menuntaskan produk hingga tahap deployment dan siap digunakan publik."
+      text: "Terbukti mampu menuntaskan produk hingga deployment dan siap digunakan publik."
     },
     {
       title: "Continuous Learner",
-      text: "Konsisten mengasah skill full-stack sesuai kebutuhan industri dan tren teknologi terbaru."
+      text: "Konsisten mengasah kemampuan full-stack sesuai kebutuhan industri dan tren teknologi terbaru."
     }
   ],
   projects: [
@@ -48,6 +48,7 @@ const fallbackProfile = {
   ],
   quote:
     "Gapailah cita-cita setinggi langit, lalu jadilah manfaat bagi diri sendiri dan orang lain.",
+  quoteAuthor: "~Ragah. D. Wijaya",
   photoUrl: "/images/profile-placeholder.svg",
   cvUrl: "/cv-ragah-dirotama-wijaya.txt",
   socials: {
@@ -145,6 +146,7 @@ export default function HomePage() {
 
       <section className="quote-box glass-card">
         <p>{profile.quote}</p>
+        <span>{profile.quoteAuthor || "~Ragah. D. Wijaya"}</span>
       </section>
 
       <section id="about">

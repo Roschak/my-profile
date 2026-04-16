@@ -7,7 +7,7 @@ const app = express();
 const profile = {
   name: "Ragah Dirotama Wijaya",
   tagline:
-    "Adaptive and progressive Full-stack Developer yang membangun aplikasi modern dari ide sampai live deployment.",
+    "Full-stack Developer adaptif dan progresif yang membangun produk digital modern dari ide hingga live deployment.",
   about:
     "Saya adalah Full-stack Developer yang menggabungkan kecepatan eksekusi, disiplin engineering, dan orientasi hasil untuk menghasilkan produk digital yang relevan. Berbekal pengalaman pada React, Tailwind CSS, Node.js (Express), Laravel, dan Firebase, saya terbiasa menangani alur pengembangan end-to-end. Saya juga memiliki mindset secure development sehingga aplikasi yang saya bangun tidak hanya cepat, tetapi juga lebih kokoh menghadapi risiko keamanan dasar.",
   stack: [
@@ -47,6 +47,7 @@ const profile = {
   ],
   quote:
     "Gapailah cita-cita setinggi langit, lalu jadilah manfaat bagi diri sendiri dan orang lain.",
+  quoteAuthor: "~Ragah. D. Wijaya",
   photoUrl: "/images/profile-placeholder.svg",
   cvUrl: "/cv-ragah-dirotama-wijaya.txt",
   socials: {

@@ -267,6 +267,15 @@ body {
   text-wrap: balance;
 }
 
+.quote-box span {
+  display: block;
+  margin-top: 10px;
+  text-align: right;
+  color: #9ec0b8;
+  letter-spacing: 0.06em;
+  font-size: 0.86rem;
+}
+
 .profile-board {
   margin-top: 16px;
   border: 1px solid rgba(117, 255, 213, 0.2);
@@ -358,6 +367,7 @@ body {
 .section-title p {
   margin-top: 8px;
   color: #a9bfba;
+  line-height: 1.7;
 }
 
 .project-grid {
