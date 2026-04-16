@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import ParticleField from "../components/ParticleField";
 import ProfileBoard from "../components/ProfileBoard";
@@ -42,12 +43,21 @@ const fallbackProfile = {
       name: "Hungry Greens Salad",
       text: "Membangun platform bisnis makanan sehat dengan pengalaman pengguna yang bersih dan cepat."
     }
-  ]
+  ],
+  quote:
+    "Gapailah cita-cita hingga setinggi langit, sehingga dapat bermanfaat bagi diri kita dan orang lain.",
+  photoUrl: "/images/profile-placeholder.svg",
+  cvUrl: "/cv-ragah-dirotama-wijaya.txt",
+  socials: {
+    instagram: "https://instagram.com/",
+    github: "https://github.com/Roschak",
+    facebook: "https://facebook.com/",
+    linkedin: "https://linkedin.com/"
+  }
 };
 
 export default function HomePage() {
   const [profile, setProfile] = useState(fallbackProfile);
-  const [apiStatus, setApiStatus] = useState("offline");
 
   const apiBaseUrl = useMemo(() => {
     return process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:4000";
@@ -67,10 +77,9 @@ export default function HomePage() {
         }
 
         const data = await response.json();
-        setProfile(data.profile);
-        setApiStatus("online");
+        setProfile((prev) => ({ ...prev, ...data.profile }));
       } catch (error) {
-        setApiStatus("offline");
+        // Keep fallback data when API is not reachable.
       }
     };
 
@@ -86,20 +95,92 @@ export default function HomePage() {
       <div className="ambient ambient-a" />
       <div className="ambient ambient-b" />
 
-      <section className="hero">
-        <p className="status-line">
-          API backend: <span className={`status ${apiStatus}`}>{apiStatus}</span>
-        </p>
-        <h1>
-          Membangun Produk Digital dengan Sentuhan Modern, Cepat, dan Siap Scale.
-        </h1>
-        <p>
-          Saya menggabungkan mindset engineering, desain fungsional, dan eksekusi
-          yang disiplin untuk menghadirkan pengalaman web yang solid.
-        </p>
+      <header className="glass-nav">
+        <a className="brand" href="#home">
+          Ragah
+        </a>
+        <nav>
+          <a href="#about">About</a>
+          <a href="#portfolio">Portfolio</a>
+          <a href="#contact">Contact</a>
+        </nav>
+      </header>
+
+      <div className="side-name">RAGAH DIROTAMA WIJAYA</div>
+
+      <section id="home" className="hero hero-grid">
+        <article className="hero-copy glass-card">
+          <p className="hero-kicker">Full-stack Developer Portfolio</p>
+          <h1>{profile.tagline}</h1>
+          <p>
+            Saya membangun produk digital end-to-end: dari desain antarmuka,
+            integrasi API, sampai deployment yang siap dipakai secara publik.
+          </p>
+          <div className="hero-actions">
+            <a className="btn btn-primary" href={profile.cvUrl} download>
+              Download CV
+            </a>
+            <a className="btn" href="#contact">
+              Hubungi Saya
+            </a>
+          </div>
+        </article>
+
+        <aside className="hero-visual glass-card">
+          <div className="photo-frame">
+            <Image
+              src={profile.photoUrl}
+              alt="Foto profil Ragah Dirotama Wijaya"
+              width={400}
+              height={400}
+              priority
+            />
+          </div>
+          <h2>{profile.name}</h2>
+          <p>SMKN 1 Ciomas • PPLG • Adaptive Builder</p>
+        </aside>
       </section>
 
-      <ProfileBoard profile={profile} />
+      <section className="quote-box glass-card">
+        <p>{profile.quote}</p>
+      </section>
+
+      <section id="about">
+        <ProfileBoard profile={profile} />
+      </section>
+
+      <section id="portfolio" className="portfolio-section glass-card">
+        <div className="section-title">
+          <h2>Selected Projects</h2>
+          <p>Project nyata yang menunjukkan eksekusi, kualitas, dan dampak.</p>
+        </div>
+        <div className="project-grid">
+          {(profile.projects || []).map((item) => (
+            <article key={item.name} className="project-card">
+              <h3>{item.name}</h3>
+              <p>{item.text}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <footer id="contact" className="glass-footer">
+        <p>Connect with me:</p>
+        <div className="social-links">
+          <a href={profile.socials?.instagram} target="_blank" rel="noreferrer">
+            Instagram
+          </a>
+          <a href={profile.socials?.github} target="_blank" rel="noreferrer">
+            GitHub
+          </a>
+          <a href={profile.socials?.facebook} target="_blank" rel="noreferrer">
+            Facebook
+          </a>
+          <a href={profile.socials?.linkedin} target="_blank" rel="noreferrer">
+            LinkedIn
+          </a>
+        </div>
+      </footer>
     </main>
   );
 }

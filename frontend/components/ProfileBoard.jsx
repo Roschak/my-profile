@@ -16,7 +16,7 @@ export default function ProfileBoard({ profile }) {
         <section>
           <h3>Stack Utama</h3>
           <ul className="chip-list">
-            {profile.stack.map((item) => (
+            {(profile.stack || []).map((item) => (
               <li key={item}>{item}</li>
             ))}
           </ul>
@@ -25,21 +25,9 @@ export default function ProfileBoard({ profile }) {
         <section>
           <h3>Kekuatan Utama</h3>
           <ul className="strength-list">
-            {profile.strengths.map((item) => (
+            {(profile.strengths || []).map((item) => (
               <li key={item.title}>
                 <strong>{item.title}:</strong> {item.text}
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        <section>
-          <h3>Project Highlight</h3>
-          <ul className="project-list">
-            {profile.projects.map((item) => (
-              <li key={item.name}>
-                <p className="project-name">{item.name}</p>
-                <p>{item.text}</p>
               </li>
             ))}
           </ul>

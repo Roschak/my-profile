@@ -42,7 +42,17 @@ const profile = {
       name: "Hungry Greens Salad",
       text: "Membangun aplikasi untuk bisnis makanan sehat dengan fokus pada experience dan performa."
     }
-  ]
+  ],
+  quote:
+    "Gapailah cita-cita hingga setinggi langit, sehingga dapat bermanfaat bagi diri kita dan orang lain.",
+  photoUrl: "/images/profile-placeholder.svg",
+  cvUrl: "/cv-ragah-dirotama-wijaya.txt",
+  socials: {
+    instagram: "https://instagram.com/",
+    github: "https://github.com/Roschak",
+    facebook: "https://facebook.com/",
+    linkedin: "https://linkedin.com/"
+  }
 };
 
 app.use(helmet());
