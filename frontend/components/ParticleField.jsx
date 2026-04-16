@@ -6,6 +6,55 @@ const PARTICLE_COUNT = 70;
 const TAG_PARTICLE_COUNT = 9;
 const TECH_TAGS = ["JS", "TS", "PY", "PHP", "GO", "SQL", "HTML", "CSS", "NODE"];
 
+// Formation patterns: each is an array of {x, y} coordinate offsets
+const FORMATIONS = {
+  REACT: [
+    // 'R' shape
+    { x: 0, y: 0 }, { x: 0, y: 8 }, { x: 0, y: 16 },
+    { x: 8, y: 0 }, { x: 16, y: 0 },
+    { x: 8, y: 8 }, { x: 16, y: 8 },
+    { x: 8, y: 16 }
+  ],
+  NODE: [
+    // 'N' shape
+    { x: 0, y: 0 }, { x: 0, y: 8 }, { x: 0, y: 16 },
+    { x: 16, y: 0 }, { x: 16, y: 8 }, { x: 16, y: 16 },
+    { x: 8, y: 8 }
+  ],
+  PYTHON: [
+    // 'P' shape  
+    { x: 0, y: 0 }, { x: 0, y: 8 }, { x: 0, y: 16 },
+    { x: 8, y: 0 }, { x: 16, y: 0 },
+    { x: 8, y: 8 }, { x: 16, y: 8 }
+  ],
+  AT_FIELD: [
+    // Evangelion AT Field symbol (cross with circle)
+    { x: 8, y: 0 }, { x: 8, y: 4 }, { x: 8, y: 8 }, { x: 8, y: 12 }, { x: 8, y: 16 },
+    { x: 0, y: 8 }, { x: 4, y: 8 }, { x: 12, y: 8 }, { x: 16, y: 8 },
+    { x: 6, y: 6 }, { x: 6, y: 10 }, { x: 10, y: 6 }, { x: 10, y: 10 }
+  ],
+  ANGEL: [
+    // Evangelion Angel shape (geometric pattern)
+    { x: 8, y: 0 }, { x: 4, y: 4 }, { x: 0, y: 8 },
+    { x: 4, y: 12 }, { x: 8, y: 16 }, { x: 12, y: 12 },
+    { x: 16, y: 8 }, { x: 12, y: 4 },
+    { x: 8, y: 2 }, { x: 8, y: 14 }, { x: 2, y: 8 }, { x: 14, y: 8 }
+  ]
+};
+
+const FORMATION_SEQUENCE = [
+  { name: "FREE", duration: 3000 },
+  { name: "REACT", duration: 2500 },
+  { name: "FREE", duration: 3000 },
+  { name: "NODE", duration: 2500 },
+  { name: "FREE", duration: 3000 },
+  { name: "PYTHON", duration: 2500 },
+  { name: "FREE", duration: 3000 },
+  { name: "AT_FIELD", duration: 2500 },
+  { name: "FREE", duration: 3000 },
+  { name: "ANGEL", duration: 2500 }
+];
+
 export default function ParticleField() {
   const canvasRef = useRef(null);
 
@@ -19,6 +68,7 @@ export default function ParticleField() {
     let height = 0;
     let particles = [];
     let tagParticles = [];
+    let formationState = { current: 0, elapsed: 0, targets: null };
 
     const randomBetween = (min, max) => Math.random() * (max - min) + min;
 
@@ -33,13 +83,25 @@ export default function ParticleField() {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
 
+    const createFormationTargets = (formationName, centerX, centerY) => {
+      const formation = FORMATIONS[formationName];
+      if (!formation) return null;
+      const scale = 2.5;
+      return formation.map(pt => ({
+        x: centerX + pt.x * scale,
+        y: centerY + pt.y * scale
+      }));
+    };
+
     const initParticles = () => {
       particles = Array.from({ length: PARTICLE_COUNT }).map(() => ({
         x: randomBetween(0, width),
         y: randomBetween(0, height),
         vx: randomBetween(-0.35, 0.35),
         vy: randomBetween(-0.35, 0.35),
-        r: randomBetween(1.1, 2.6)
+        r: randomBetween(1.1, 2.6),
+        targetX: null,
+        targetY: null
       }));
 
       tagParticles = Array.from({ length: TAG_PARTICLE_COUNT }).map((_, index) => ({
@@ -51,7 +113,27 @@ export default function ParticleField() {
       }));
     };
 
-    const moveParticle = (item) => {
+    const moveParticle = (item, useTarget = false) => {
+      if (useTarget && item.targetX !== null && item.targetY !== null) {
+        const dx = item.targetX - item.x;
+        const dy = item.targetY - item.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const attractForce = 0.08;
+        
+        if (dist > 2) {
+          item.vx += (dx / dist) * attractForce;
+          item.vy += (dy / dist) * attractForce;
+          item.vx *= 0.92;
+          item.vy *= 0.92;
+        }
+      } else {
+        // Free floating behavior
+        if (item.targetX !== null) {
+          item.vx = randomBetween(-0.35, 0.35);
+          item.vy = randomBetween(-0.35, 0.35);
+        }
+      }
+
       item.x += item.vx;
       item.y += item.vy;
 
@@ -62,11 +144,49 @@ export default function ParticleField() {
     };
 
     const draw = () => {
+      // Update formation state
+      formationState.elapsed += 16;
+      const currentPhase = FORMATION_SEQUENCE[formationState.current];
+      
+      if (formationState.elapsed >= currentPhase.duration) {
+        formationState.elapsed = 0;
+        formationState.current = (formationState.current + 1) % FORMATION_SEQUENCE.length;
+        const nextPhase = FORMATION_SEQUENCE[formationState.current];
+        
+        // Create targets for the new formation
+        if (nextPhase.name !== "FREE") {
+          formationState.targets = createFormationTargets(
+            nextPhase.name,
+            width / 2 - 40,
+            height / 2 - 50
+          );
+          // Assign particles to targets cyclically
+          particles.forEach((p, i) => {
+            if (formationState.targets && i < formationState.targets.length) {
+              p.targetX = formationState.targets[i].x;
+              p.targetY = formationState.targets[i].y;
+            } else {
+              p.targetX = null;
+              p.targetY = null;
+            }
+          });
+        } else {
+          // Free mode: clear targets
+          particles.forEach(p => {
+            p.targetX = null;
+            p.targetY = null;
+          });
+          formationState.targets = null;
+        }
+      }
+
       ctx.clearRect(0, 0, width, height);
+
+      const usingFormation = formationState.targets !== null;
 
       for (let i = 0; i < particles.length; i += 1) {
         const p = particles[i];
-        moveParticle(p);
+        moveParticle(p, usingFormation);
 
         ctx.beginPath();
         ctx.fillStyle = "rgba(86, 255, 194, 0.75)";
@@ -80,7 +200,7 @@ export default function ParticleField() {
 
       for (let i = 0; i < tagParticles.length; i += 1) {
         const tag = tagParticles[i];
-        moveParticle(tag);
+        moveParticle(tag, false);
 
         const label = tag.label;
         const badgeWidth = 34;
