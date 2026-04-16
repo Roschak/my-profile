@@ -3,6 +3,8 @@
 import { useEffect, useRef } from "react";
 
 const PARTICLE_COUNT = 70;
+const TAG_PARTICLE_COUNT = 9;
+const TECH_TAGS = ["JS", "TS", "PY", "PHP", "GO", "SQL", "HTML", "CSS", "NODE"];
 
 export default function ParticleField() {
   const canvasRef = useRef(null);
@@ -16,6 +18,7 @@ export default function ParticleField() {
     let width = 0;
     let height = 0;
     let particles = [];
+    let tagParticles = [];
 
     const randomBetween = (min, max) => Math.random() * (max - min) + min;
 
@@ -38,6 +41,24 @@ export default function ParticleField() {
         vy: randomBetween(-0.35, 0.35),
         r: randomBetween(1.1, 2.6)
       }));
+
+      tagParticles = Array.from({ length: TAG_PARTICLE_COUNT }).map((_, index) => ({
+        x: randomBetween(0, width),
+        y: randomBetween(0, height),
+        vx: randomBetween(-0.22, 0.22),
+        vy: randomBetween(-0.22, 0.22),
+        label: TECH_TAGS[index % TECH_TAGS.length]
+      }));
+    };
+
+    const moveParticle = (item) => {
+      item.x += item.vx;
+      item.y += item.vy;
+
+      if (item.x <= -24) item.x = width + 24;
+      if (item.x >= width + 24) item.x = -24;
+      if (item.y <= -24) item.y = height + 24;
+      if (item.y >= height + 24) item.y = -24;
     };
 
     const draw = () => {
@@ -45,13 +66,7 @@ export default function ParticleField() {
 
       for (let i = 0; i < particles.length; i += 1) {
         const p = particles[i];
-        p.x += p.vx;
-        p.y += p.vy;
-
-        if (p.x <= -20) p.x = width + 20;
-        if (p.x >= width + 20) p.x = -20;
-        if (p.y <= -20) p.y = height + 20;
-        if (p.y >= height + 20) p.y = -20;
+        moveParticle(p);
 
         ctx.beginPath();
         ctx.fillStyle = "rgba(86, 255, 194, 0.75)";
@@ -62,6 +77,31 @@ export default function ParticleField() {
       }
 
       ctx.shadowBlur = 0;
+
+      for (let i = 0; i < tagParticles.length; i += 1) {
+        const tag = tagParticles[i];
+        moveParticle(tag);
+
+        const label = tag.label;
+        const badgeWidth = 34;
+        const badgeHeight = 18;
+        const x = tag.x - badgeWidth / 2;
+        const y = tag.y - badgeHeight / 2;
+
+        ctx.beginPath();
+        ctx.fillStyle = "rgba(20, 41, 37, 0.62)";
+        ctx.strokeStyle = "rgba(112, 255, 220, 0.45)";
+        ctx.lineWidth = 1;
+        ctx.roundRect(x, y, badgeWidth, badgeHeight, 8);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.font = "600 9px Sora, sans-serif";
+        ctx.fillStyle = "rgba(198, 255, 237, 0.9)";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(label, tag.x, tag.y + 0.5);
+      }
 
       for (let i = 0; i < particles.length; i += 1) {
         for (let j = i + 1; j < particles.length; j += 1) {

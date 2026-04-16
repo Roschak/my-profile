@@ -37,22 +37,24 @@ const fallbackProfile = {
   projects: [
     {
       name: "Green Live Initiative (GLI)",
-      text: "Mengubah konsep inisiatif lingkungan menjadi aplikasi web yang dapat diakses pengguna nyata."
+      text: "Platform inisiatif lingkungan dengan pengalaman pengguna yang responsif dan modern.",
+      url: "https://gli-project-web.web.app"
     },
     {
       name: "Hungry Greens Salad",
-      text: "Membangun platform bisnis makanan sehat dengan pengalaman pengguna yang bersih dan cepat."
+      text: "Web app bisnis makanan sehat dengan performa cepat dan UI clean.",
+      url: "https://hungrygreenssalad-v2.vercel.app"
     }
   ],
   quote:
-    "Gapailah cita-cita hingga setinggi langit, sehingga dapat bermanfaat bagi diri kita dan orang lain.",
+    "Gapailah cita-cita setinggi langit, lalu jadilah manfaat bagi diri sendiri dan orang lain.",
   photoUrl: "/images/profile-placeholder.svg",
   cvUrl: "/cv-ragah-dirotama-wijaya.txt",
   socials: {
-    instagram: "https://instagram.com/",
+    instagram: "https://www.instagram.com/roschak_rk",
     github: "https://github.com/Roschak",
-    facebook: "https://facebook.com/",
-    linkedin: "https://linkedin.com/"
+    facebook: "https://www.facebook.com/share/1HtcbQvqGJ/",
+    linkedin: "https://www.linkedin.com/in/ragah-dirotama-wijaya-38303b30b"
   }
 };
 
@@ -159,27 +161,61 @@ export default function HomePage() {
             <article key={item.name} className="project-card">
               <h3>{item.name}</h3>
               <p>{item.text}</p>
+              <a href={item.url} target="_blank" rel="noreferrer">
+                Kunjungi Project
+              </a>
             </article>
           ))}
         </div>
       </section>
 
       <footer id="contact" className="glass-footer">
-        <p>Connect with me:</p>
+        <p>Connect with me</p>
         <div className="social-links">
-          <a href={profile.socials?.instagram} target="_blank" rel="noreferrer">
-            Instagram
+          <a
+            className="social-badge"
+            href={profile.socials?.instagram}
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Instagram"
+            title="Instagram"
+          >
+            <span>IG</span>
           </a>
-          <a href={profile.socials?.github} target="_blank" rel="noreferrer">
-            GitHub
+          <a
+            className="social-badge"
+            href={profile.socials?.github}
+            target="_blank"
+            rel="noreferrer"
+            aria-label="GitHub"
+            title="GitHub"
+          >
+            <span>GH</span>
           </a>
-          <a href={profile.socials?.facebook} target="_blank" rel="noreferrer">
-            Facebook
+          <a
+            className="social-badge"
+            href={profile.socials?.facebook}
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Facebook"
+            title="Facebook"
+          >
+            <span>FB</span>
           </a>
-          <a href={profile.socials?.linkedin} target="_blank" rel="noreferrer">
-            LinkedIn
+          <a
+            className="social-badge"
+            href={profile.socials?.linkedin}
+            target="_blank"
+            rel="noreferrer"
+            aria-label="LinkedIn"
+            title="LinkedIn"
+          >
+            <span>IN</span>
           </a>
         </div>
+        <p className="contact-note">
+          Instagram • GitHub • Facebook • LinkedIn
+        </p>
       </footer>
     </main>
   );

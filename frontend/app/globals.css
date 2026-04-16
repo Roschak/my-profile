@@ -138,7 +138,7 @@ body {
 }
 
 .hero {
-  margin-top: 20px;
+  margin-top: 24px;
 }
 
 .hero-grid {
@@ -177,10 +177,10 @@ body {
 
 .hero-copy p {
   margin-top: 18px;
-  max-width: 66ch;
+  max-width: 56ch;
   color: var(--muted);
   font-size: clamp(0.96rem, 1.9vw, 1.1rem);
-  line-height: 1.7;
+  line-height: 1.75;
 }
 
 .hero-actions {
@@ -252,16 +252,19 @@ body {
 }
 
 .quote-box {
-  margin-top: 16px;
-  border-radius: 16px;
-  padding: 18px 22px;
+  margin-top: 18px;
+  border-radius: 20px;
+  padding: 20px 24px;
+  max-width: 760px;
 }
 
 .quote-box p {
   margin: 0;
-  color: #d5efe8;
+  color: #ddfdf2;
   font-style: italic;
-  line-height: 1.7;
+  line-height: 1.6;
+  font-size: clamp(1rem, 2vw, 1.18rem);
+  text-wrap: balance;
 }
 
 .profile-board {
@@ -342,7 +345,7 @@ body {
 }
 
 .portfolio-section {
-  margin-top: 16px;
+  margin-top: 20px;
   border-radius: 24px;
   padding: clamp(18px, 3vw, 30px);
 }
@@ -358,17 +361,20 @@ body {
 }
 
 .project-grid {
-  margin-top: 14px;
+  margin-top: 18px;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+  gap: 16px;
 }
 
 .project-card {
   border: 1px solid rgba(117, 255, 213, 0.18);
   border-radius: 16px;
   background: rgba(7, 13, 12, 0.64);
-  padding: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .project-card h3 {
@@ -377,44 +383,113 @@ body {
 }
 
 .project-card p {
-  margin-top: 8px;
+  margin: 0;
   color: #bfd2cd;
   line-height: 1.6;
 }
 
+.project-card a {
+  width: fit-content;
+  text-decoration: none;
+  font-size: 0.9rem;
+  color: #e6fff8;
+  border: 1px solid rgba(117, 255, 213, 0.35);
+  border-radius: 999px;
+  padding: 7px 12px;
+  background: rgba(89, 255, 198, 0.1);
+}
+
+.project-card a:hover {
+  background: rgba(89, 255, 198, 0.2);
+}
+
 .glass-footer {
-  margin-top: 18px;
-  border-radius: 16px;
-  padding: 16px 18px;
+  margin-top: 22px;
+  border-radius: 20px;
+  padding: 22px 20px;
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  gap: 10px;
+  justify-content: center;
+  gap: 14px;
 }
 
 .glass-footer p {
   margin: 0;
-  color: #b8cdca;
+  color: #d2ebe5;
+}
+
+.contact-note {
+  color: #a5c0ba;
+  font-size: 0.86rem;
+  letter-spacing: 0.06em;
+  text-align: center;
 }
 
 .social-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 14px;
+  justify-content: center;
+  width: 100%;
 }
 
-.social-links a {
-  text-decoration: none;
-  color: #defbf2;
-  border: 1px solid rgba(117, 255, 213, 0.24);
+.social-badge {
+  width: 58px;
+  height: 58px;
   border-radius: 999px;
-  padding: 8px 12px;
-  font-size: 0.9rem;
+  border: 1px solid rgba(117, 255, 213, 0.5);
+  background: radial-gradient(circle at 30% 22%, rgba(198, 255, 238, 0.6), rgba(75, 167, 139, 0.24) 32%, rgba(7, 15, 14, 0.95) 72%);
+  box-shadow: inset 0 1px 8px rgba(255, 255, 255, 0.22), 0 0 16px rgba(117, 255, 213, 0.25);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: #ebfff9;
+  position: relative;
+  overflow: hidden;
 }
 
-.social-links a:hover {
-  background: rgba(117, 255, 213, 0.11);
+.social-badge::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: -26px;
+  width: 28px;
+  height: 85px;
+  transform: rotate(25deg);
+  background: rgba(255, 255, 255, 0.38);
+  filter: blur(1px);
+  animation: gloss 4s ease-in-out infinite;
+}
+
+.social-badge span {
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+}
+
+.social-badge:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: inset 0 1px 8px rgba(255, 255, 255, 0.24), 0 0 22px rgba(117, 255, 213, 0.42);
+}
+
+@keyframes gloss {
+  0% {
+    transform: translateX(-28px) rotate(25deg);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.75;
+  }
+  40% {
+    transform: translateX(70px) rotate(25deg);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(70px) rotate(25deg);
+    opacity: 0;
+  }
 }
 
 @keyframes rise {
@@ -456,6 +531,10 @@ body {
 
   .project-grid {
     grid-template-columns: 1fr;
+  }
+
+  .quote-box {
+    max-width: 100%;
   }
 
   .page-shell {

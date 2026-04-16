@@ -36,22 +36,24 @@ const profile = {
   projects: [
     {
       name: "Green Live Initiative (GLI)",
-      text: "Merealisasikan konsep aplikasi inisiatif lingkungan menjadi platform web yang siap diakses pengguna."
+      text: "Platform inisiatif lingkungan dengan pengalaman pengguna yang responsif dan modern.",
+      url: "https://gli-project-web.web.app"
     },
     {
       name: "Hungry Greens Salad",
-      text: "Membangun aplikasi untuk bisnis makanan sehat dengan fokus pada experience dan performa."
+      text: "Web app bisnis makanan sehat dengan performa cepat dan UI clean.",
+      url: "https://hungrygreenssalad-v2.vercel.app"
     }
   ],
   quote:
-    "Gapailah cita-cita hingga setinggi langit, sehingga dapat bermanfaat bagi diri kita dan orang lain.",
+    "Gapailah cita-cita setinggi langit, lalu jadilah manfaat bagi diri sendiri dan orang lain.",
   photoUrl: "/images/profile-placeholder.svg",
   cvUrl: "/cv-ragah-dirotama-wijaya.txt",
   socials: {
-    instagram: "https://instagram.com/",
+    instagram: "https://www.instagram.com/roschak_rk",
     github: "https://github.com/Roschak",
-    facebook: "https://facebook.com/",
-    linkedin: "https://linkedin.com/"
+    facebook: "https://www.facebook.com/share/1HtcbQvqGJ/",
+    linkedin: "https://www.linkedin.com/in/ragah-dirotama-wijaya-38303b30b"
   }
 };
 
