@@ -11,9 +11,11 @@ const profile = {
   about:
     "Saya adalah Full-stack Developer yang menggabungkan kecepatan eksekusi, disiplin engineering, dan orientasi hasil untuk menghasilkan produk digital yang relevan. Berbekal pengalaman pada React, Tailwind CSS, Node.js (Express), Laravel, dan Firebase, saya terbiasa menangani alur pengembangan end-to-end. Saya juga memiliki mindset secure development sehingga aplikasi yang saya bangun tidak hanya cepat, tetapi juga lebih kokoh menghadapi risiko keamanan dasar.",
   stack: [
-    "Frontend: React, Next.js, Tailwind CSS",
-    "Backend: Node.js (Express), Laravel, Firebase",
-    "Tools: Git, Vercel, Postman"
+    "Frontend: HTML, CSS, JavaScript (ES6+), React.js.",
+    "Backend: PHP, Laravel, Node.js, Express.js.",
+    "Database: MySQL, Firebase (Firestore & Authentication).",
+    "Tools & Platform: Git, GitHub, Postman, Vercel Deployment.",
+    "Produktivitas: Implementasi AI Tools untuk efisiensi alur kerja pemrograman."
   ],
   strengths: [
     {

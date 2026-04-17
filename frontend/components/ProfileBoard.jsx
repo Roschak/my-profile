@@ -14,7 +14,7 @@ export default function ProfileBoard({ profile }) {
         </section>
 
         <section>
-          <h3>Stack Utama</h3>
+          <h3>KEAHLIAN TEKNIS</h3>
           <ul className="chip-list">
             {(profile.stack || []).map((item) => (
               <li key={item}>{item}</li>

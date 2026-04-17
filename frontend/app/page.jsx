@@ -1,3 +1,4 @@
+/* page.jsx */
 "use client";
 
 import Image from "next/image";
@@ -5,16 +6,18 @@ import { useEffect, useMemo, useState } from "react";
 import ParticleField from "../components/ParticleField";
 import ProfileBoard from "../components/ProfileBoard";
 
-const fallbackProfile = {
+const fallbackProfile = {      
   name: "Ragah Dirotama Wijaya",
   tagline:
     "Full-stack Developer adaptif dan progresif yang membangun produk digital modern dari ide hingga rilis.",
   about:
     "Saya adalah siswa PPLG SMKN 1 Ciomas yang berfokus mengeksekusi ide menjadi aplikasi nyata, mulai dari antarmuka yang responsif hingga API yang stabil dan aman. Saya terbiasa berkolaborasi dengan AI tools untuk mempercepat delivery tanpa mengorbankan kualitas.",
   stack: [
-    "Frontend: React, Next.js, Tailwind CSS",
-    "Backend: Node.js (Express), Laravel, Firebase",
-    "Tools: Git, Vercel, Postman"
+    "Frontend: HTML, CSS, JavaScript (ES6+), React.js.",
+    "Backend: PHP, Laravel, Node.js, Express.js.",
+    "Database: MySQL, Firebase (Firestore & Authentication).",
+    "Tools & Platform: Git, GitHub, Postman, Vercel Deployment.",
+    "Produktivitas: Implementasi AI Tools untuk efisiensi alur kerja pemrograman."
   ],
   strengths: [
     {
@@ -49,8 +52,8 @@ const fallbackProfile = {
   quote:
     "Gapailah cita-cita hingga setinggi langit, sehingga kita dapat bermanfaat bagi diri kita dan orang lain.",
   quoteAuthor: "~Ragah. D. Wijaya",
-  photoUrl: "/images/profile-placeholder.svg",
-  cvUrl: "/cv-ragah-dirotama-wijaya.txt",
+  photoUrl: "/images/foto-aku.png",
+  cvUrl: "/CV-RAGAH-DIROTAMA-WIJAYA.pdf",
   socials: {
     instagram: "https://www.instagram.com/roschak_rk",
     github: "https://github.com/Roschak",
