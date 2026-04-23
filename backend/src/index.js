@@ -17,6 +17,11 @@ const profile = {
     "Tools & Platform: Git, GitHub, Postman, Vercel Deployment.",
     "Produktivitas: Implementasi AI Tools untuk efisiensi alur kerja pemrograman."
   ],
+  languages: [
+    "Bahasa Indonesia",
+    "English (Intermediate)",
+    "Sunda"
+  ],
   strengths: [
     {
       title: "High Adaptability",
@@ -39,19 +44,36 @@ const profile = {
     {
       name: "Green Live Initiative (GLI)",
       text: "Platform inisiatif lingkungan dengan pengalaman pengguna yang responsif dan modern.",
-      url: "https://gli-project-web.web.app"
+      url: "https://gli-project-web.web.app",
+      github: "https://github.com/Roschak",
+      image: ""
     },
     {
       name: "Hungry Greens Salad",
       text: "Web app bisnis makanan sehat dengan performa cepat dan UI clean.",
-      url: "https://hungrygreenssalad-v2.vercel.app"
+      url: "https://hungrygreenssalad-v2.vercel.app",
+      github: "https://github.com/Roschak",
+      image: ""
+    },
+    {
+      name: "Jakarta Dream (Game)",
+      text: "Game project yang dipublikasikan di Itch.io dengan tema Jakarta Dream.",
+      url: "https://skanic.itch.io/jakarta-dream",
+      github: "https://github.com/Roschak",
+      image: ""
     }
   ],
   quote:
     "Gapailah cita-cita hingga setinggi langit, sehingga kita dapat bermanfaat bagi diri kita dan orang lain.",
   quoteAuthor: "~Ragah. D. Wijaya",
-  photoUrl: "/images/profile-placeholder.svg",
-  cvUrl: "/cv-ragah-dirotama-wijaya.txt",
+  photoUrl: "/images/foto-aku.png",
+  cvUrl: "/CV-RAGAH-DIROTAMA-WIJAYA.pdf",
+  contactInfo: {
+    address: "Isi alamat lengkap Anda di sini",
+    phone: "Isi nomor telepon Anda di sini",
+    email: "isi-email@contoh.com",
+    availability: "Senin - Jumat"
+  },
   socials: {
     instagram: "https://www.instagram.com/roschak_rk",
     github: "https://github.com/Roschak",

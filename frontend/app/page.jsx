@@ -4,9 +4,8 @@
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import ParticleField from "../components/ParticleField";
-import ProfileBoard from "../components/ProfileBoard";
 
-const fallbackProfile = {      
+const fallbackProfile = {
   name: "Ragah Dirotama Wijaya",
   tagline:
     "Full-stack Developer adaptif dan progresif yang membangun produk digital modern dari ide hingga rilis.",
@@ -18,6 +17,11 @@ const fallbackProfile = {
     "Database: MySQL, Firebase (Firestore & Authentication).",
     "Tools & Platform: Git, GitHub, Postman, Vercel Deployment.",
     "Produktivitas: Implementasi AI Tools untuk efisiensi alur kerja pemrograman."
+  ],
+  languages: [
+    "Bahasa Indonesia",
+    "English (Intermediate)",
+    "Sunda"
   ],
   strengths: [
     {
@@ -41,12 +45,23 @@ const fallbackProfile = {
     {
       name: "Green Live Initiative (GLI)",
       text: "Platform inisiatif lingkungan dengan pengalaman pengguna yang responsif dan modern.",
-      url: "https://gli-project-web.web.app"
+      url: "https://gli-project-web.web.app",
+      github: "https://github.com/Roschak",
+      image: ""
     },
     {
       name: "Hungry Greens Salad",
       text: "Web app bisnis makanan sehat dengan performa cepat dan UI clean.",
-      url: "https://hungrygreenssalad-v2.vercel.app"
+      url: "https://hungrygreenssalad-v2.vercel.app",
+      github: "https://github.com/Roschak",
+      image: ""
+    },
+    {
+      name: "Jakarta Dream (Game)",
+      text: "Game project yang dipublikasikan di Itch.io dengan tema Jakarta Dream.",
+      url: "https://skanic.itch.io/jakarta-dream",
+      github: "https://github.com/Roschak",
+      image: ""
     }
   ],
   quote:
@@ -54,6 +69,12 @@ const fallbackProfile = {
   quoteAuthor: "~Ragah. D. Wijaya",
   photoUrl: "/images/foto-aku.png",
   cvUrl: "/CV-RAGAH-DIROTAMA-WIJAYA.pdf",
+  contactInfo: {
+    address: "Isi alamat lengkap Anda di sini",
+    phone: "Isi nomor telepon Anda di sini",
+    email: "isi-email@contoh.com",
+    availability: "Senin - Jumat"
+  },
   socials: {
     instagram: "https://www.instagram.com/roschak_rk",
     github: "https://github.com/Roschak",
@@ -64,6 +85,19 @@ const fallbackProfile = {
 
 export default function HomePage() {
   const [profile, setProfile] = useState(fallbackProfile);
+  const languages = profile.languages || fallbackProfile.languages;
+  const contactInfo = {
+    ...fallbackProfile.contactInfo,
+    ...(profile.contactInfo || {})
+  };
+
+  const getDomain = (url) => {
+    try {
+      return new URL(url).hostname.replace("www.", "");
+    } catch {
+      return "link-project";
+    }
+  };
 
   const apiBaseUrl = useMemo(() => {
     return process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:4000";
@@ -98,24 +132,22 @@ export default function HomePage() {
     <main className="page-shell">
       <ParticleField />
 
-      <div className="ambient ambient-a" />
-      <div className="ambient ambient-b" />
-
-      <header className="glass-nav">
+      <header className="top-nav">
         <a className="brand" href="#home">
           Ragah
         </a>
         <nav>
+          <a href="#bahasa">Bahasa</a>
           <a href="#about">About</a>
+          <a href="#skills">Skills</a>
+          <a href="#services">Services</a>
           <a href="#portfolio">Portfolio</a>
           <a href="#contact">Contact</a>
         </nav>
       </header>
 
-      <div className="side-name">RAGAH DIROTAMA WIJAYA</div>
-
-      <section id="home" className="hero hero-grid">
-        <article className="hero-copy glass-card">
+      <section id="home" className="hero-shell">
+        <article className="hero-copy">
           <p className="hero-kicker">Full-stack Developer Portfolio</p>
           <h1>{profile.tagline}</h1>
           <p>
@@ -132,7 +164,7 @@ export default function HomePage() {
           </div>
         </article>
 
-        <aside className="hero-visual glass-card">
+        <aside className="hero-visual">
           <div className="photo-frame">
             <Image
               src={profile.photoUrl}
@@ -147,34 +179,176 @@ export default function HomePage() {
         </aside>
       </section>
 
-      <section className="quote-box glass-card">
+      <section className="quote-box">
         <p>{profile.quote}</p>
         <span>{profile.quoteAuthor || "~Ragah. D. Wijaya"}</span>
       </section>
 
-      <section id="about">
-        <ProfileBoard profile={profile} />
+      <section className="intro-stats" aria-label="Ringkasan capaian">
+        <article className="stat-item">
+          <strong>{(profile.projects || []).length}+</strong>
+          <span>Project Ditampilkan</span>
+        </article>
+        <article className="stat-item">
+          <strong>3+</strong>
+          <span>Stack Full-Stack</span>
+        </article>
+        <article className="stat-item">
+          <strong>100%</strong>
+          <span>Komitmen Delivery</span>
+        </article>
       </section>
 
-      <section id="portfolio" className="portfolio-section glass-card">
-        <div className="section-title">
-          <h2>Selected Projects</h2>
-          <p>Project nyata yang menunjukkan eksekusi, kualitas, dan dampak.</p>
+      <section id="bahasa" className="language-strip-wrap">
+        <div className="section-head">
+          <h2>Bahasa</h2>
+          <p>Ditampilkan model komidi putar menyamping.</p>
         </div>
-        <div className="project-grid">
-          {(profile.projects || []).map((item) => (
-            <article key={item.name} className="project-card">
-              <h3>{item.name}</h3>
+        <div className="language-strip" role="list" aria-label="Bahasa yang dikuasai">
+          {[...languages, ...languages].map(
+            (lang, idx) => (
+              <span key={`${lang}-${idx}`} className="lang-pill" role="listitem">
+                {lang}
+              </span>
+            )
+          )}
+        </div>
+      </section>
+
+      <section id="about" className="about-section">
+        <div className="section-head">
+          <h2>Get to Know Me Better</h2>
+        </div>
+        <div className="about-grid">
+          <article className="about-copy">
+            <p>{profile.about}</p>
+          </article>
+          <aside className="about-photo-board">
+            <div className="about-aurora" aria-hidden="true" />
+            <div className="photo-frame photo-frame-about">
+              <Image
+                src={profile.photoUrl}
+                alt={`Foto ${profile.name}`}
+                width={340}
+                height={340}
+              />
+            </div>
+            <h3>{profile.name}</h3>
+            <p>{profile.tagline}</p>
+          </aside>
+        </div>
+      </section>
+
+      <section id="skills" className="skills-section">
+        <div className="section-head">
+          <h2>Keahlian Teknis</h2>
+        </div>
+        <ul className="skills-flow">
+          {(profile.stack || []).map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
+      </section>
+
+      <section id="services" className="services-section">
+        <div className="section-head">
+          <h2>What I Do</h2>
+          <p>Pendekatan kerja saya dalam membangun produk digital.</p>
+        </div>
+        <div className="service-grid">
+          {(profile.strengths || []).map((item) => (
+            <article className="service-card" key={item.title}>
+              <h3>{item.title}</h3>
               <p>{item.text}</p>
-              <a href={item.url} target="_blank" rel="noreferrer">
-                Kunjungi Project
-              </a>
             </article>
           ))}
         </div>
       </section>
 
-      <footer id="contact" className="glass-footer">
+      <section id="portfolio" className="portfolio-section">
+        <div className="section-head">
+          <h2>Selected Projects</h2>
+          <p>Tiap project sudah ada slot foto, silakan isi gambar project Anda nanti.</p>
+        </div>
+        <div className="project-grid">
+          {(profile.projects || []).map((item) => (
+            <article key={item.name} className="project-card">
+              {item.image ? (
+                <Image
+                  className="project-thumb"
+                  src={item.image}
+                  alt={`Preview ${item.name}`}
+                  width={600}
+                  height={340}
+                />
+              ) : (
+                <div className="project-thumb placeholder">
+                  <div>
+                    <strong>{item.name}</strong>
+                    <span>{getDomain(item.url)}</span>
+                  </div>
+                </div>
+              )}
+              <div className="project-body">
+                <h3>{item.name}</h3>
+                <p>{item.text}</p>
+                <div className="project-actions">
+                  <a className="project-link project-link-live" href={item.url} target="_blank" rel="noreferrer">
+                    Lihat Project
+                  </a>
+                  <a
+                    className="project-link"
+                    href={item.github || profile.socials?.github}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Lihat GitHub
+                  </a>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section id="contact" className="contact-section">
+        <div className="section-head">
+          <h2>Let&apos;s Work Together</h2>
+          <p>Kontak dibuat terpisah agar rapi dan mudah dibaca.</p>
+        </div>
+        <div className="contact-layout">
+          <article className="contact-panel">
+            <h3>Let&apos;s Talk</h3>
+            <p>
+              Punya project menarik atau kesempatan magang/PKL? Saya siap diskusi
+              dan berkolaborasi untuk hasil terbaik.
+            </p>
+            <a className="btn btn-primary" href={`mailto:${contactInfo.email}`}>
+              Kirim Email
+            </a>
+          </article>
+          <div className="contact-grid">
+            <article className="contact-card">
+              <h3>Alamat</h3>
+              <p>{contactInfo.address}</p>
+            </article>
+            <article className="contact-card">
+              <h3>No. Telepon</h3>
+              <p>{contactInfo.phone}</p>
+            </article>
+            <article className="contact-card">
+              <h3>Email</h3>
+              <p>{contactInfo.email}</p>
+            </article>
+            <article className="contact-card">
+              <h3>Ketersediaan</h3>
+              <p>{contactInfo.availability}</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <footer className="social-section">
         <p>Connect with me</p>
         <div className="social-links">
           <a
