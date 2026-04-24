@@ -4,13 +4,14 @@
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import ParticleField from "../components/ParticleField";
+import PixelUrabe from "../components/PixelUrabeReal";
 
 const fallbackProfile = {
   name: "Ragah Dirotama Wijaya",
   tagline:
     "Full-stack Developer adaptif dan progresif yang membangun produk digital modern dari ide hingga rilis.",
   about:
-    "Saya adalah siswa PPLG SMKN 1 Ciomas yang berfokus mengeksekusi ide menjadi aplikasi nyata, mulai dari antarmuka yang responsif hingga API yang stabil dan aman. Saya terbiasa berkolaborasi dengan AI tools untuk mempercepat delivery tanpa mengorbankan kualitas.",
+    "Siswa SMK jurusan Pengembangan Perangkat Lunak dan Gim (PPLG) yang berfokus pada pengembangan Web Full Stack. Memiliki dedikasi tinggi dalam mempelajari teknologi industri terbaru dan adaptif dalam lingkungan pemrograman yang dinamis. Spesialisasi dalam membangun solusi web yang responsif dan fungsional menggunakan ekosistem JavaScript dan PHP.",
   stack: [
     "Frontend: HTML, CSS, JavaScript (ES6+), React.js.",
     "Backend: PHP, Laravel, Node.js, Express.js.",
@@ -47,6 +48,8 @@ const fallbackProfile = {
       text: "Platform inisiatif lingkungan dengan pengalaman pengguna yang responsif dan modern.",
       url: "https://gli-project-web.web.app",
       github: "https://github.com/Roschak",
+      type: "Project",
+      tech: ["React", "Firebase", "UI/UX"],
       image: ""
     },
     {
@@ -54,6 +57,8 @@ const fallbackProfile = {
       text: "Web app bisnis makanan sehat dengan performa cepat dan UI clean.",
       url: "https://hungrygreenssalad-v2.vercel.app",
       github: "https://github.com/Roschak",
+      type: "Project",
+      tech: ["HTML", "CSS", "JavaScript"],
       image: ""
     },
     {
@@ -61,6 +66,8 @@ const fallbackProfile = {
       text: "Game project yang dipublikasikan di Itch.io dengan tema Jakarta Dream.",
       url: "https://skanic.itch.io/jakarta-dream",
       github: "https://github.com/Roschak",
+      type: "Game Project",
+      tech: ["Unity", "C#", "Itch.io"],
       image: ""
     }
   ],
@@ -70,10 +77,11 @@ const fallbackProfile = {
   photoUrl: "/images/foto-aku.png",
   cvUrl: "/CV-RAGAH-DIROTAMA-WIJAYA.pdf",
   contactInfo: {
-    address: "Isi alamat lengkap Anda di sini",
-    phone: "Isi nomor telepon Anda di sini",
-    email: "isi-email@contoh.com",
-    availability: "Senin - Jumat"
+    address:
+      "Komplek RH Jl. Rh. Acesukarna IV No.8\nRT.01/RW.03, Pasirmulya\nKec. Bogor Bar.\nKota Bogor\nJawa Barat 16118",
+    phone: "+62 812-1147-3740",
+    email: "ragahbuana@gmail.com",
+    availability: "Setiap saat"
   },
   socials: {
     instagram: "https://www.instagram.com/roschak_rk",
@@ -132,6 +140,8 @@ export default function HomePage() {
     <main className="page-shell">
       <ParticleField />
 
+      <div className="content-wrap">
+
       <header className="top-nav">
         <a className="brand" href="#home">
           Ragah
@@ -141,7 +151,7 @@ export default function HomePage() {
           <a href="#about">About</a>
           <a href="#skills">Skills</a>
           <a href="#services">Services</a>
-          <a href="#portfolio">Portfolio</a>
+          <a href="/projects">Projects</a>
           <a href="#contact">Contact</a>
         </nav>
       </header>
@@ -154,9 +164,13 @@ export default function HomePage() {
             Saya membangun produk digital end-to-end: dari desain antarmuka,
             integrasi API, sampai deployment yang siap dipakai secara publik.
           </p>
+
           <div className="hero-actions">
             <a className="btn btn-primary" href={profile.cvUrl} download>
               Download CV
+            </a>
+            <a className="btn" href="/projects">
+              Lihat Projects
             </a>
             <a className="btn" href="#contact">
               Hubungi Saya
@@ -164,18 +178,20 @@ export default function HomePage() {
           </div>
         </article>
 
-        <aside className="hero-visual">
-          <div className="photo-frame">
-            <Image
-              src={profile.photoUrl}
-              alt="Foto profil Ragah Dirotama Wijaya"
-              width={400}
-              height={400}
-              priority
-            />
+        <aside className="hero-photo-wrap" aria-label="Profile photo showcase">
+          <div className="hero-photo-card">
+            <div className="photo-frame photo-frame-hero">
+              <Image
+                src={profile.photoUrl}
+                alt={`Foto ${profile.name}`}
+                width={420}
+                height={420}
+                priority
+              />
+            </div>
+            <h3>{profile.name}</h3>
+            <p>Full-stack Developer</p>
           </div>
-          <h2>{profile.name}</h2>
-          <p>SMKN 1 Ciomas • PPLG • Adaptive Builder</p>
         </aside>
       </section>
 
@@ -199,23 +215,7 @@ export default function HomePage() {
         </article>
       </section>
 
-      <section id="bahasa" className="language-strip-wrap">
-        <div className="section-head">
-          <h2>Bahasa</h2>
-          <p>Ditampilkan model komidi putar menyamping.</p>
-        </div>
-        <div className="language-strip" role="list" aria-label="Bahasa yang dikuasai">
-          {[...languages, ...languages].map(
-            (lang, idx) => (
-              <span key={`${lang}-${idx}`} className="lang-pill" role="listitem">
-                {lang}
-              </span>
-            )
-          )}
-        </div>
-      </section>
-
-      <section id="about" className="about-section">
+      <section id="about" className="section-wrap about-section">
         <div className="section-head">
           <h2>Get to Know Me Better</h2>
         </div>
@@ -239,7 +239,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="skills" className="skills-section">
+      <section id="skills" className="section-wrap skills-section">
         <div className="section-head">
           <h2>Keahlian Teknis</h2>
         </div>
@@ -250,7 +250,7 @@ export default function HomePage() {
         </ul>
       </section>
 
-      <section id="services" className="services-section">
+      <section id="services" className="section-wrap services-section">
         <div className="section-head">
           <h2>What I Do</h2>
           <p>Pendekatan kerja saya dalam membangun produk digital.</p>
@@ -265,13 +265,13 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="portfolio" className="portfolio-section">
+      <section id="portfolio" className="section-wrap portfolio-section">
         <div className="section-head">
           <h2>Selected Projects</h2>
           <p>Tiap project sudah ada slot foto, silakan isi gambar project Anda nanti.</p>
         </div>
         <div className="project-grid">
-          {(profile.projects || []).map((item) => (
+          {(profile.projects || []).map((item, index) => (
             <article key={item.name} className="project-card">
               {item.image ? (
                 <Image
@@ -290,11 +290,20 @@ export default function HomePage() {
                 </div>
               )}
               <div className="project-body">
+                <div className="project-meta">
+                  <span className="project-kind">{item.type || "Project"}</span>
+                  <span className="project-index">{String(index + 1).padStart(2, "0")}</span>
+                </div>
                 <h3>{item.name}</h3>
                 <p>{item.text}</p>
+                <ul className="project-tech">
+                  {(item.tech || ["Web", "Portfolio"]).map((tech) => (
+                    <li key={`${item.name}-${tech}`}>{tech}</li>
+                  ))}
+                </ul>
                 <div className="project-actions">
                   <a className="project-link project-link-live" href={item.url} target="_blank" rel="noreferrer">
-                    Lihat Project
+                    View Details
                   </a>
                   <a
                     className="project-link"
@@ -302,7 +311,7 @@ export default function HomePage() {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    Lihat GitHub
+                    GitHub
                   </a>
                 </div>
               </div>
@@ -311,7 +320,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="contact" className="contact-section">
+      <section id="contact" className="section-wrap contact-section">
         <div className="section-head">
           <h2>Let&apos;s Work Together</h2>
           <p>Kontak dibuat terpisah agar rapi dan mudah dibaca.</p>
@@ -330,7 +339,7 @@ export default function HomePage() {
           <div className="contact-grid">
             <article className="contact-card">
               <h3>Alamat</h3>
-              <p>{contactInfo.address}</p>
+              <p className="contact-address">{contactInfo.address}</p>
             </article>
             <article className="contact-card">
               <h3>No. Telepon</h3>
@@ -344,6 +353,21 @@ export default function HomePage() {
               <h3>Ketersediaan</h3>
               <p>{contactInfo.availability}</p>
             </article>
+          </div>
+        </div>
+      </section>
+
+      <section className="section-wrap pixel-showcase" aria-label="Pixel character showcase">
+        <div className="section-head">
+          <h2>Pixel Character</h2>
+          <p>Mode karakter pixel diposisikan sebelum link media sosial.</p>
+        </div>
+        <div className="pixel-stage-wrap">
+          <div className="pixel-stage">
+            <div className="character-canvas-wrap">
+              <PixelUrabe />
+              <div className="character-glow" aria-hidden="true" />
+            </div>
           </div>
         </div>
       </section>
@@ -396,6 +420,8 @@ export default function HomePage() {
           Instagram • GitHub • Facebook • LinkedIn
         </p>
       </footer>
+
+      </div>
     </main>
   );
 }

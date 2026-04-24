@@ -46,6 +46,8 @@ const profile = {
       text: "Platform inisiatif lingkungan dengan pengalaman pengguna yang responsif dan modern.",
       url: "https://gli-project-web.web.app",
       github: "https://github.com/Roschak",
+      type: "Project",
+      tech: ["React", "Firebase", "UI/UX"],
       image: ""
     },
     {
@@ -53,6 +55,8 @@ const profile = {
       text: "Web app bisnis makanan sehat dengan performa cepat dan UI clean.",
       url: "https://hungrygreenssalad-v2.vercel.app",
       github: "https://github.com/Roschak",
+      type: "Project",
+      tech: ["HTML", "CSS", "JavaScript"],
       image: ""
     },
     {
@@ -60,6 +64,31 @@ const profile = {
       text: "Game project yang dipublikasikan di Itch.io dengan tema Jakarta Dream.",
       url: "https://skanic.itch.io/jakarta-dream",
       github: "https://github.com/Roschak",
+      type: "Game Project",
+      tech: ["Unity", "C#", "Itch.io"],
+      image: ""
+    }
+  ],
+  certificates: [
+    {
+      title: "Belajar Back-End Pemula Dengan JavaScript",
+      issuer: "Dicoding",
+      date: "2026-02-01",
+      verifyUrl: "https://www.dicoding.com/",
+      image: ""
+    },
+    {
+      title: "Belajar Dasar AI",
+      issuer: "Dicoding",
+      date: "2026-02-01",
+      verifyUrl: "https://www.dicoding.com/",
+      image: ""
+    },
+    {
+      title: "Belajar Dasar Cloud dan Gen AI di AWS",
+      issuer: "Dicoding",
+      date: "2026-02-01",
+      verifyUrl: "https://www.dicoding.com/",
       image: ""
     }
   ],
