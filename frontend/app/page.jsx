@@ -1,4 +1,4 @@
-/* page.jsx */
+/* page.jsx — Luxury Jazz / Old Money Cinematic Portfolio */
 "use client";
 
 import Image from "next/image";
@@ -19,11 +19,7 @@ const fallbackProfile = {
     "Tools & Platform: Git, GitHub, Postman, Vercel Deployment.",
     "Produktivitas: Implementasi AI Tools untuk efisiensi alur kerja pemrograman."
   ],
-  languages: [
-    "Bahasa Indonesia",
-    "English (Intermediate)",
-    "Sunda"
-  ],
+  languages: ["Bahasa Indonesia", "English (Intermediate)", "Sunda"],
   strengths: [
     {
       title: "Adaptasi Tinggi",
@@ -42,35 +38,7 @@ const fallbackProfile = {
       text: "Konsisten mengasah kemampuan full-stack sesuai kebutuhan industri dan tren teknologi terbaru."
     }
   ],
-  projects: [
-    {
-      name: "Green Live Initiative (GLI)",
-      text: "Platform inisiatif lingkungan dengan pengalaman pengguna yang responsif dan modern.",
-      url: "https://gli-project-web.web.app",
-      github: "https://github.com/Roschak",
-      type: "Project",
-      tech: ["React", "Firebase", "UI/UX"],
-      image: ""
-    },
-    {
-      name: "Hungry Greens Salad",
-      text: "Web app bisnis makanan sehat dengan performa cepat dan UI clean.",
-      url: "https://hungrygreenssalad-v2.vercel.app",
-      github: "https://github.com/Roschak",
-      type: "Project",
-      tech: ["HTML", "CSS", "JavaScript"],
-      image: ""
-    },
-    {
-      name: "Jakarta Dream (Game)",
-      text: "Game project yang dipublikasikan di Itch.io dengan tema Jakarta Dream.",
-      url: "https://skanic.itch.io/jakarta-dream",
-      github: "https://github.com/Roschak",
-      type: "Game Project",
-      tech: ["Unity", "C#", "Itch.io"],
-      image: ""
-    }
-  ],
+  projects: [],
   quote:
     "Gapailah cita-cita hingga setinggi langit, sehingga kita dapat bermanfaat bagi diri kita dan orang lain.",
   quoteAuthor: "~Ragah. D. Wijaya",
@@ -93,333 +61,287 @@ const fallbackProfile = {
 
 export default function HomePage() {
   const [profile, setProfile] = useState(fallbackProfile);
-  const languages = profile.languages || fallbackProfile.languages;
+
   const contactInfo = {
     ...fallbackProfile.contactInfo,
     ...(profile.contactInfo || {})
   };
 
-  const getDomain = (url) => {
-    try {
-      return new URL(url).hostname.replace("www.", "");
-    } catch {
-      return "link-project";
-    }
-  };
-
-  const apiBaseUrl = useMemo(() => {
-    return process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:4000";
-  }, []);
+  const apiBaseUrl = useMemo(
+    () => process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:4000",
+    []
+  );
 
   useEffect(() => {
     const controller = new AbortController();
-
     const loadProfile = async () => {
       try {
         const response = await fetch(`${apiBaseUrl}/api/profile`, {
           signal: controller.signal
         });
-
-        if (!response.ok) {
-          throw new Error("Gagal mengambil data profil.");
-        }
-
+        if (!response.ok) throw new Error("Gagal mengambil data profil.");
         const data = await response.json();
         setProfile((prev) => ({ ...prev, ...data.profile }));
-      } catch (error) {
+      } catch {
         // Keep fallback data when API is not reachable.
       }
     };
-
     loadProfile();
-
     return () => controller.abort();
   }, [apiBaseUrl]);
 
   return (
     <main className="page-shell">
+      {/* ── Cinematic starry background ── */}
       <ParticleField />
 
       <div className="content-wrap">
 
-      <header className="top-nav">
-        <a className="brand" href="#home">
-          Ragah
-        </a>
-        <nav>
-          <a href="#bahasa">Bahasa</a>
-          <a href="#about">About</a>
-          <a href="#skills">Skills</a>
-          <a href="#services">Services</a>
-          <a href="/projects">Projects</a>
-          <a href="#contact">Contact</a>
-        </nav>
-      </header>
+        {/* ── Navigation ── */}
+        <header className="top-nav">
+          <a className="brand" href="#home">Ragah</a>
+          <nav>
+            <a href="#about">About</a>
+            <a href="#skills">Skills</a>
+            <a href="#services">Services</a>
+            <a href="/projects">Projects</a>
+            <a href="/certificates">Certificates</a>
+            <a href="#contact">Contact</a>
+          </nav>
+        </header>
 
-      <section id="home" className="hero-shell">
-        <article className="hero-copy">
-          <p className="hero-kicker">Full-stack Developer Portfolio</p>
-          <h1>{profile.tagline}</h1>
-          <p>
-            Saya membangun produk digital end-to-end: dari desain antarmuka,
-            integrasi API, sampai deployment yang siap dipakai secara publik.
-          </p>
+        {/* ── Hero ── */}
+        <section id="home" className="hero-shell-v2">
+          <div className="hero-content-v2">
 
-          <div className="hero-actions">
-            <a className="btn btn-primary" href={profile.cvUrl} download>
-              Download CV
-            </a>
-            <a className="btn" href="/projects">
-              Lihat Projects
-            </a>
-            <a className="btn" href="#contact">
-              Hubungi Saya
-            </a>
-          </div>
-        </article>
+            {/* Text column */}
+            <div className="hero-text">
+              <p className="hero-eyebrow">Full-stack Developer</p>
 
-        <aside className="hero-photo-wrap" aria-label="Profile photo showcase">
-          <div className="hero-photo-card">
-            <div className="photo-frame photo-frame-hero">
-              <Image
-                src={profile.photoUrl}
-                alt={`Foto ${profile.name}`}
-                width={420}
-                height={420}
-                priority
-              />
+              <h1 className="hero-title">
+                Ragah<br />
+                <span className="accent">Dirotama</span><br />
+                Wijaya
+              </h1>
+
+              <div className="hero-divider" aria-hidden="true" />
+
+              <p className="hero-subtitle">
+                Building modern digital products from idea to release —
+                with precision, elegance, and a passion for clean code.
+              </p>
+
+              <div className="hero-meta">
+                <span className="hero-meta-pill">
+                  <span className="dot" aria-hidden="true" />
+                  Bogor, Indonesia
+                </span>
+                <span className="hero-meta-pill">
+                  <span className="dot" aria-hidden="true" />
+                  Full-stack · UI · API
+                </span>
+                <span className="hero-meta-pill">
+                  <span className="dot" aria-hidden="true" />
+                  Open to Opportunities
+                </span>
+              </div>
+
+              <div className="hero-actions-v2">
+                <a className="btn btn-primary" href={profile.cvUrl} download>
+                  Download CV
+                </a>
+                <a className="btn btn-secondary" href="/projects">
+                  View Projects
+                </a>
+              </div>
             </div>
-            <h3>{profile.name}</h3>
-            <p>Full-stack Developer</p>
-          </div>
-        </aside>
-      </section>
 
-      <section className="quote-box">
-        <p>{profile.quote}</p>
-        <span>{profile.quoteAuthor || "~Ragah. D. Wijaya"}</span>
-      </section>
-
-      <section className="intro-stats" aria-label="Ringkasan capaian">
-        <article className="stat-item">
-          <strong>{(profile.projects || []).length}+</strong>
-          <span>Project Ditampilkan</span>
-        </article>
-        <article className="stat-item">
-          <strong>3+</strong>
-          <span>Stack Full-Stack</span>
-        </article>
-        <article className="stat-item">
-          <strong>100%</strong>
-          <span>Komitmen Delivery</span>
-        </article>
-      </section>
-
-      <section id="about" className="section-wrap about-section">
-        <div className="section-head">
-          <h2>Get to Know Me Better</h2>
-        </div>
-        <div className="about-grid">
-          <article className="about-copy">
-            <p>{profile.about}</p>
-          </article>
-          <aside className="about-photo-board">
-            <div className="about-aurora" aria-hidden="true" />
-            <div className="photo-frame photo-frame-about">
-              <Image
-                src={profile.photoUrl}
-                alt={`Foto ${profile.name}`}
-                width={340}
-                height={340}
-              />
-            </div>
-            <h3>{profile.name}</h3>
-            <p>{profile.tagline}</p>
-          </aside>
-        </div>
-      </section>
-
-      <section id="skills" className="section-wrap skills-section">
-        <div className="section-head">
-          <h2>Keahlian Teknis</h2>
-        </div>
-        <ul className="skills-flow">
-          {(profile.stack || []).map((item) => (
-            <li key={item}>{item}</li>
-          ))}
-        </ul>
-      </section>
-
-      <section id="services" className="section-wrap services-section">
-        <div className="section-head">
-          <h2>What I Do</h2>
-          <p>Pendekatan kerja saya dalam membangun produk digital.</p>
-        </div>
-        <div className="service-grid">
-          {(profile.strengths || []).map((item) => (
-            <article className="service-card" key={item.title}>
-              <h3>{item.title}</h3>
-              <p>{item.text}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section id="portfolio" className="section-wrap portfolio-section">
-        <div className="section-head">
-          <h2>Selected Projects</h2>
-          <p>Tiap project sudah ada slot foto, silakan isi gambar project Anda nanti.</p>
-        </div>
-        <div className="project-grid">
-          {(profile.projects || []).map((item, index) => (
-            <article key={item.name} className="project-card">
-              {item.image ? (
-                <Image
-                  className="project-thumb"
-                  src={item.image}
-                  alt={`Preview ${item.name}`}
-                  width={600}
-                  height={340}
-                />
-              ) : (
-                <div className="project-thumb placeholder">
-                  <div>
-                    <strong>{item.name}</strong>
-                    <span>{getDomain(item.url)}</span>
-                  </div>
-                </div>
-              )}
-              <div className="project-body">
-                <div className="project-meta">
-                  <span className="project-kind">{item.type || "Project"}</span>
-                  <span className="project-index">{String(index + 1).padStart(2, "0")}</span>
-                </div>
-                <h3>{item.name}</h3>
-                <p>{item.text}</p>
-                <ul className="project-tech">
-                  {(item.tech || ["Web", "Portfolio"]).map((tech) => (
-                    <li key={`${item.name}-${tech}`}>{tech}</li>
-                  ))}
-                </ul>
-                <div className="project-actions">
-                  <a className="project-link project-link-live" href={item.url} target="_blank" rel="noreferrer">
-                    View Details
-                  </a>
-                  <a
-                    className="project-link"
-                    href={item.github || profile.socials?.github}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    GitHub
-                  </a>
+            {/* Photo column */}
+            <div className="hero-photo-v2">
+              <div className="photo-container-v2">
+                <div className="photo-caption">Orbit Portrait</div>
+                <div className="photo-frame-v2">
+                  <Image
+                    src={profile.photoUrl}
+                    alt={`Foto ${profile.name}`}
+                    fill
+                    priority
+                    sizes="(max-width: 768px) 90vw, 400px"
+                    style={{ objectFit: "contain", objectPosition: "center top" }}
+                  />
                 </div>
               </div>
-            </article>
-          ))}
-        </div>
-      </section>
+            </div>
 
-      <section id="contact" className="section-wrap contact-section">
-        <div className="section-head">
-          <h2>Let&apos;s Work Together</h2>
-          <p>Kontak dibuat terpisah agar rapi dan mudah dibaca.</p>
-        </div>
-        <div className="contact-layout">
-          <article className="contact-panel">
-            <h3>Let&apos;s Talk</h3>
-            <p>
-              Punya project menarik atau kesempatan magang/PKL? Saya siap diskusi
-              dan berkolaborasi untuk hasil terbaik.
-            </p>
-            <a className="btn btn-primary" href={`mailto:${contactInfo.email}`}>
-              Kirim Email
-            </a>
-          </article>
-          <div className="contact-grid">
-            <article className="contact-card">
-              <h3>Alamat</h3>
-              <p className="contact-address">{contactInfo.address}</p>
-            </article>
-            <article className="contact-card">
-              <h3>No. Telepon</h3>
-              <p>{contactInfo.phone}</p>
-            </article>
-            <article className="contact-card">
-              <h3>Email</h3>
-              <p>{contactInfo.email}</p>
-            </article>
-            <article className="contact-card">
-              <h3>Ketersediaan</h3>
-              <p>{contactInfo.availability}</p>
-            </article>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section className="section-wrap pixel-showcase" aria-label="Pixel character showcase">
-        <div className="section-head">
-          <h2>Pixel Character</h2>
-          <p>Mode karakter pixel diposisikan sebelum link media sosial.</p>
-        </div>
-        <div className="pixel-stage-wrap">
-          <div className="pixel-stage">
-            <div className="character-canvas-wrap">
-              <PixelUrabe />
-              <div className="character-glow" aria-hidden="true" />
+        {/* ── Quote ── */}
+        <blockquote className="quote-box">
+          <p>{profile.quote}</p>
+          <span>{profile.quoteAuthor || "~Ragah. D. Wijaya"}</span>
+        </blockquote>
+
+        {/* ── Stats ── */}
+        <section className="intro-stats" aria-label="Ringkasan capaian">
+          <article className="stat-item">
+            <strong>2+</strong>
+            <span>Years Learning</span>
+          </article>
+          <article className="stat-item">
+            <strong>3+</strong>
+            <span>Full-Stack Stacks</span>
+          </article>
+          <article className="stat-item">
+            <strong>100%</strong>
+            <span>Delivery Commitment</span>
+          </article>
+        </section>
+
+        {/* ── About ── */}
+        <section id="about" className="section-wrap about-section">
+          <div className="section-head">
+            <p className="section-label">About Me</p>
+            <h2>Get to Know Me Better</h2>
+          </div>
+          <div className="about-grid">
+            <article className="about-copy">
+              <p>{profile.about}</p>
+            </article>
+            <aside className="about-photo-board">
+              <div className="photo-frame photo-frame-about">
+                <Image
+                  src={profile.photoUrl}
+                  alt={`Foto ${profile.name}`}
+                  width={340}
+                  height={340}
+                />
+              </div>
+              <h3>{profile.name}</h3>
+              <p>{profile.tagline}</p>
+            </aside>
+          </div>
+        </section>
+
+        {/* ── Skills ── */}
+        <section id="skills" className="section-wrap">
+          <div className="section-head">
+            <p className="section-label">Technical Skills</p>
+            <h2>Keahlian Teknis</h2>
+          </div>
+          <ul className="skills-flow">
+            {(profile.stack || []).map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </section>
+
+        {/* ── Services / Strengths ── */}
+        <section id="services" className="section-wrap">
+          <div className="section-head">
+            <p className="section-label">What I Do</p>
+            <h2>Pendekatan Kerja</h2>
+            <p>Cara saya membangun produk digital yang bermakna.</p>
+          </div>
+          <div className="service-grid">
+            {(profile.strengths || []).map((item) => (
+              <article className="service-card" key={item.title}>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        {/* ── Contact ── */}
+        <section id="contact" className="section-wrap">
+          <div className="section-head">
+            <p className="section-label">Contact</p>
+            <h2>Let&apos;s Work Together</h2>
+          </div>
+          <div className="contact-layout">
+            <article className="contact-panel">
+              <h3>Let&apos;s Talk</h3>
+              <p>
+                Punya project menarik atau kesempatan magang/PKL? Saya siap
+                diskusi dan berkolaborasi untuk hasil terbaik.
+              </p>
+              <a className="btn btn-primary" href={`mailto:${contactInfo.email}`}>
+                Kirim Email
+              </a>
+            </article>
+            <div className="contact-grid">
+              <article className="contact-card">
+                <h3>Alamat</h3>
+                <p className="contact-address">{contactInfo.address}</p>
+              </article>
+              <article className="contact-card">
+                <h3>Telepon</h3>
+                <p>{contactInfo.phone}</p>
+              </article>
+              <article className="contact-card">
+                <h3>Email</h3>
+                <p>{contactInfo.email}</p>
+              </article>
+              <article className="contact-card">
+                <h3>Ketersediaan</h3>
+                <p>{contactInfo.availability}</p>
+              </article>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <footer className="social-section">
-        <p>Connect with me</p>
-        <div className="social-links">
-          <a
-            className="social-badge"
-            href={profile.socials?.instagram}
-            target="_blank"
-            rel="noreferrer"
-            aria-label="Instagram"
-            title="Instagram"
-          >
-            <span>IG</span>
-          </a>
-          <a
-            className="social-badge"
-            href={profile.socials?.github}
-            target="_blank"
-            rel="noreferrer"
-            aria-label="GitHub"
-            title="GitHub"
-          >
-            <span>GH</span>
-          </a>
-          <a
-            className="social-badge"
-            href={profile.socials?.facebook}
-            target="_blank"
-            rel="noreferrer"
-            aria-label="Facebook"
-            title="Facebook"
-          >
-            <span>FB</span>
-          </a>
-          <a
-            className="social-badge"
-            href={profile.socials?.linkedin}
-            target="_blank"
-            rel="noreferrer"
-            aria-label="LinkedIn"
-            title="LinkedIn"
-          >
-            <span>IN</span>
-          </a>
-        </div>
-        <p className="contact-note">
-          Instagram • GitHub • Facebook • LinkedIn
-        </p>
-      </footer>
+        {/* ── Pixel Character ── */}
+        <section className="section-wrap pixel-showcase" aria-label="Pixel character showcase">
+          <div className="section-head">
+            <p className="section-label">Companion</p>
+            <h2>Pixel Character</h2>
+          </div>
+          <div className="pixel-stage-wrap">
+            <div className="pixel-stage">
+              <div className="character-canvas-wrap">
+                <PixelUrabe />
+                <div className="character-glow" aria-hidden="true" />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Social Footer ── */}
+        <footer className="social-section">
+          <p>Connect with me</p>
+          <div className="social-links">
+            <a
+              className="social-badge"
+              href={profile.socials?.instagram}
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Instagram"
+            >IG</a>
+            <a
+              className="social-badge"
+              href={profile.socials?.github}
+              target="_blank"
+              rel="noreferrer"
+              aria-label="GitHub"
+            >GH</a>
+            <a
+              className="social-badge"
+              href={profile.socials?.facebook}
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Facebook"
+            >FB</a>
+            <a
+              className="social-badge"
+              href={profile.socials?.linkedin}
+              target="_blank"
+              rel="noreferrer"
+              aria-label="LinkedIn"
+            >IN</a>
+          </div>
+          <p className="contact-note">Instagram · GitHub · Facebook · LinkedIn</p>
+        </footer>
 
       </div>
     </main>

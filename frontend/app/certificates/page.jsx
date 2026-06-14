@@ -1,10 +1,10 @@
-/* projects/page.jsx — Luxury Jazz Portfolio */
+/* certificates/page.jsx — Luxury Jazz Portfolio */
 "use client";
 
 import { useEffect, useState } from "react";
 import { isSupabaseConfigured, supabase } from "../../lib/supabaseClient";
 
-const ADMIN_PROJECTS_KEY = "ragah_admin_projects_v2";
+const ADMIN_CERTIFICATES_KEY = "ragah_admin_certificates_v2";
 
 const parseStorageJson = (value, fallback = []) => {
   if (!value) return fallback;
@@ -16,30 +16,43 @@ const parseStorageJson = (value, fallback = []) => {
   }
 };
 
-export default function ProjectsPage() {
+const formatDate = (dateValue) => {
+  const date = new Date(dateValue);
+  if (Number.isNaN(date.getTime())) return dateValue;
+  return new Intl.DateTimeFormat("id-ID", {
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+  }).format(date);
+};
+
+export default function CertificatesPage() {
   const [query, setQuery] = useState("");
-  const [projects, setProjects] = useState([]);
+  const [certificates, setCertificates] = useState([]);
   const [modeLabel, setModeLabel] = useState("Local");
 
   useEffect(() => {
     const load = async () => {
       if (isSupabaseConfigured && supabase) {
         const { data, error } = await supabase
-          .from("projects")
-          .select("id,name,description,project_type,tech,live_url,repo_url,image_url")
+          .from("certificates")
+          .select(
+            "id,title,issuer,issued_at,description,file_type,file_url,verify_url,cover_image_url"
+          )
           .order("created_at", { ascending: false });
 
         if (!error && data) {
-          setProjects(
+          setCertificates(
             data.map((item) => ({
               id: item.id,
-              name: item.name,
-              text: item.description,
-              type: item.project_type,
-              tech: Array.isArray(item.tech) ? item.tech : [],
-              url: item.live_url,
-              github: item.repo_url,
-              image: item.image_url
+              title: item.title,
+              issuer: item.issuer,
+              date: item.issued_at,
+              description: item.description,
+              fileType: item.file_type,
+              fileUrl: item.file_url,
+              verifyUrl: item.verify_url,
+              image: item.cover_image_url
             }))
           );
           setModeLabel("Supabase");
@@ -47,11 +60,11 @@ export default function ProjectsPage() {
         }
       }
 
-      const adminProjects = parseStorageJson(
-        window.localStorage.getItem(ADMIN_PROJECTS_KEY),
+      const adminCertificates = parseStorageJson(
+        window.localStorage.getItem(ADMIN_CERTIFICATES_KEY),
         []
       );
-      setProjects(adminProjects);
+      setCertificates(adminCertificates);
       setModeLabel("Local");
     };
 
@@ -60,33 +73,36 @@ export default function ProjectsPage() {
 
   useEffect(() => {
     const onStorageChange = (event) => {
-      if (event.key !== ADMIN_PROJECTS_KEY) return;
-      setProjects(
-        parseStorageJson(window.localStorage.getItem(ADMIN_PROJECTS_KEY), [])
+      if (event.key !== ADMIN_CERTIFICATES_KEY) return;
+      setCertificates(
+        parseStorageJson(
+          window.localStorage.getItem(ADMIN_CERTIFICATES_KEY),
+          []
+        )
       );
     };
     window.addEventListener("storage", onStorageChange);
     return () => window.removeEventListener("storage", onStorageChange);
   }, []);
 
-  const projectItems = projects.map((item, index) => ({
-    id: item.id || `project-${index}`,
-    title: item.name,
-    description: item.text,
-    badge: item.type || "Project",
-    chips: item.tech || [],
-    primaryUrl: item.url,
-    secondaryUrl: item.github,
-    initial: item.name ? item.name.charAt(0).toUpperCase() : String(index + 1)
+  const items = certificates.map((item, index) => ({
+    id: item.id || `certificate-${index}`,
+    title: item.title,
+    issuer: item.issuer,
+    date: formatDate(item.date),
+    description: item.description || `Issued by ${item.issuer}`,
+    fileUrl: item.fileUrl || item.verifyUrl,
+    verifyUrl: item.fileUrl && item.verifyUrl ? item.verifyUrl : "",
+    fileType: item.fileType || "pdf"
   }));
 
-  const filteredItems = projectItems.filter((item) => {
+  const filteredItems = items.filter((item) => {
     if (!query.trim()) return true;
     const q = query.toLowerCase();
     return (
       item.title?.toLowerCase().includes(q) ||
-      item.description?.toLowerCase().includes(q) ||
-      item.chips.join(" ").toLowerCase().includes(q)
+      item.issuer?.toLowerCase().includes(q) ||
+      item.description?.toLowerCase().includes(q)
     );
   });
 
@@ -99,7 +115,7 @@ export default function ProjectsPage() {
         position: "relative"
       }}
     >
-      {/* Ambient background glow */}
+      {/* Ambient glow */}
       <div
         aria-hidden="true"
         style={{
@@ -130,7 +146,7 @@ export default function ProjectsPage() {
             }}
           >
             <span style={{ display: "block", width: 28, height: 1, background: "var(--gold)", opacity: 0.6 }} />
-            Portfolio
+            Achievements
             <span style={{ display: "block", width: 28, height: 1, background: "var(--gold)", opacity: 0.6 }} />
           </p>
           <h1
@@ -144,7 +160,7 @@ export default function ProjectsPage() {
               lineHeight: 1.1
             }}
           >
-            Selected Works
+            Certificates &amp; Honours
           </h1>
           <p
             style={{
@@ -155,11 +171,11 @@ export default function ProjectsPage() {
               margin: "0 auto 32px"
             }}
           >
-            A curated collection of projects built with precision and purpose.
+            Certifications and milestones earned through dedication and craft.
           </p>
           <div style={{ display: "flex", justifyContent: "center", gap: "12px", flexWrap: "wrap" }}>
             <a
-              href="/certificates"
+              href="/projects"
               style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -185,7 +201,7 @@ export default function ProjectsPage() {
                 e.currentTarget.style.borderColor = "rgba(212,175,55,0.3)";
               }}
             >
-              View Certificates
+              View Projects
             </a>
             <a
               href="/"
@@ -231,7 +247,7 @@ export default function ProjectsPage() {
           <div style={{ flex: 1, position: "relative", minWidth: "240px" }}>
             <input
               type="search"
-              placeholder="Search projects by name, description, or tech..."
+              placeholder="Search certificates by title, issuer, or description..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               style={{
@@ -272,7 +288,7 @@ export default function ProjectsPage() {
               whiteSpace: "nowrap"
             }}
           >
-            {filteredItems.length} work{filteredItems.length !== 1 ? "s" : ""} · {modeLabel}
+            {filteredItems.length} certificate{filteredItems.length !== 1 ? "s" : ""} · {modeLabel}
           </span>
         </div>
 
@@ -286,7 +302,7 @@ export default function ProjectsPage() {
             }}
           >
             {filteredItems.map((item) => (
-              <ProjectCard key={item.id} item={item} />
+              <CertificateCard key={item.id} item={item} />
             ))}
           </div>
         ) : (
@@ -298,7 +314,7 @@ export default function ProjectsPage() {
   );
 }
 
-function ProjectCard({ item }) {
+function CertificateCard({ item }) {
   const [hovered, setHovered] = useState(false);
 
   return (
@@ -320,11 +336,11 @@ function ProjectCard({ item }) {
           : "0 8px 32px rgba(0,0,0,0.4)"
       }}
     >
-      {/* Card image / placeholder */}
+      {/* Card header / seal area */}
       <div
         style={{
           width: "100%",
-          height: "200px",
+          height: "180px",
           background: hovered
             ? "linear-gradient(135deg, rgba(212,175,55,0.08), rgba(147,100,220,0.06))"
             : "linear-gradient(135deg, rgba(212,175,55,0.03), rgba(147,100,220,0.03))",
@@ -337,55 +353,72 @@ function ProjectCard({ item }) {
           overflow: "hidden"
         }}
       >
-        {/* Decorative corner lines */}
-        <span
-          aria-hidden="true"
-          style={{
-            position: "absolute",
-            top: 16,
-            left: 16,
-            width: 24,
-            height: 24,
-            borderTop: "1px solid rgba(212,175,55,0.3)",
-            borderLeft: "1px solid rgba(212,175,55,0.3)",
-            opacity: hovered ? 1 : 0.4,
-            transition: "opacity 320ms ease"
-          }}
-        />
-        <span
-          aria-hidden="true"
-          style={{
-            position: "absolute",
-            bottom: 16,
-            right: 16,
-            width: 24,
-            height: 24,
-            borderBottom: "1px solid rgba(212,175,55,0.3)",
-            borderRight: "1px solid rgba(212,175,55,0.3)",
-            opacity: hovered ? 1 : 0.4,
-            transition: "opacity 320ms ease"
-          }}
-        />
-        {/* Initial monogram */}
+        {/* Corner ornaments */}
+        {[
+          { top: 14, left: 14, borderTop: true, borderLeft: true },
+          { top: 14, right: 14, borderTop: true, borderRight: true },
+          { bottom: 14, left: 14, borderBottom: true, borderLeft: true },
+          { bottom: 14, right: 14, borderBottom: true, borderRight: true }
+        ].map((pos, i) => (
+          <span
+            key={i}
+            aria-hidden="true"
+            style={{
+              position: "absolute",
+              width: 18,
+              height: 18,
+              ...pos,
+              borderTop: pos.borderTop ? "1px solid rgba(212,175,55,0.3)" : undefined,
+              borderLeft: pos.borderLeft ? "1px solid rgba(212,175,55,0.3)" : undefined,
+              borderBottom: pos.borderBottom ? "1px solid rgba(212,175,55,0.3)" : undefined,
+              borderRight: pos.borderRight ? "1px solid rgba(212,175,55,0.3)" : undefined,
+              opacity: hovered ? 1 : 0.4,
+              transition: "opacity 320ms ease"
+            }}
+          />
+        ))}
+
+        {/* Seal */}
         <div
           style={{
-            width: 80,
-            height: 80,
-            borderRadius: "50%",
-            border: "1px solid rgba(212,175,55,0.2)",
             display: "flex",
+            flexDirection: "column",
             alignItems: "center",
-            justifyContent: "center",
-            fontFamily: '"Playfair Display", serif',
-            fontSize: "2rem",
-            fontWeight: 700,
-            color: hovered ? "var(--gold)" : "rgba(212,175,55,0.5)",
-            background: "rgba(212,175,55,0.04)",
-            transition: "all 320ms ease",
-            transform: hovered ? "scale(1.08)" : "scale(1)"
+            gap: 8
           }}
         >
-          {item.initial}
+          <div
+            style={{
+              width: 56,
+              height: 56,
+              borderRadius: "50%",
+              border: `1px solid ${hovered ? "rgba(212,175,55,0.5)" : "rgba(212,175,55,0.2)"}`,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontFamily: '"Playfair Display", serif',
+              fontSize: "0.65rem",
+              fontWeight: 700,
+              color: hovered ? "var(--gold)" : "rgba(212,175,55,0.5)",
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              background: "rgba(212,175,55,0.04)",
+              transition: "all 320ms ease",
+              transform: hovered ? "scale(1.1)" : "scale(1)"
+            }}
+          >
+            CERT
+          </div>
+          <span
+            style={{
+              fontSize: "0.72rem",
+              color: hovered ? "var(--text-muted)" : "var(--text-secondary)",
+              letterSpacing: "0.08em",
+              transition: "color 320ms ease"
+            }}
+          >
+            {item.issuer}
+          </span>
         </div>
       </div>
 
@@ -406,22 +439,34 @@ function ProjectCard({ item }) {
             letterSpacing: "0.12em"
           }}
         >
-          {item.badge}
+          Certificate
         </span>
 
         <h3
           style={{
             fontFamily: '"Playfair Display", serif',
-            fontSize: "1.2rem",
+            fontSize: "1.15rem",
             fontWeight: 700,
             color: hovered ? "var(--champagne)" : "var(--text)",
-            marginBottom: "10px",
+            marginBottom: "6px",
             lineHeight: 1.3,
             transition: "color 200ms ease"
           }}
         >
           {item.title}
         </h3>
+
+        <p
+          style={{
+            color: "var(--gold)",
+            fontSize: "0.82rem",
+            fontWeight: 600,
+            marginBottom: "10px",
+            letterSpacing: "0.04em"
+          }}
+        >
+          {item.issuer}
+        </p>
 
         <p
           style={{
@@ -436,27 +481,37 @@ function ProjectCard({ item }) {
           {item.description}
         </p>
 
-        {/* Tech chips */}
-        {item.chips.length > 0 && (
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginBottom: "16px" }}>
-            {item.chips.map((chip) => (
-              <span
-                key={`${item.id}-${chip}`}
-                style={{
-                  background: "rgba(147,100,220,0.1)",
-                  color: "rgba(180,140,255,0.85)",
-                  fontSize: "0.72rem",
-                  padding: "3px 10px",
-                  borderRadius: "3px",
-                  fontWeight: 500,
-                  letterSpacing: "0.04em"
-                }}
-              >
-                {chip}
-              </span>
-            ))}
-          </div>
-        )}
+        {/* Meta */}
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginBottom: "16px" }}>
+          <span
+            style={{
+              background: "rgba(147,100,220,0.1)",
+              color: "rgba(180,140,255,0.85)",
+              fontSize: "0.72rem",
+              padding: "3px 10px",
+              borderRadius: "3px",
+              fontWeight: 500
+            }}
+          >
+            {item.date}
+          </span>
+          {item.fileType && (
+            <span
+              style={{
+                background: "rgba(147,100,220,0.1)",
+                color: "rgba(180,140,255,0.85)",
+                fontSize: "0.72rem",
+                padding: "3px 10px",
+                borderRadius: "3px",
+                fontWeight: 500,
+                textTransform: "uppercase",
+                letterSpacing: "0.06em"
+              }}
+            >
+              {item.fileType}
+            </span>
+          )}
+        </div>
 
         {/* Actions */}
         <div
@@ -467,11 +522,15 @@ function ProjectCard({ item }) {
             paddingTop: "16px"
           }}
         >
-          {item.primaryUrl && (
-            <CardLink href={item.primaryUrl} label="View Live" primary />
+          {item.fileUrl && (
+            <CertLink
+              href={item.fileUrl}
+              label={item.fileType === "pdf" ? "View PDF" : "View Certificate"}
+              primary
+            />
           )}
-          {item.secondaryUrl && (
-            <CardLink href={item.secondaryUrl} label="GitHub" />
+          {item.verifyUrl && (
+            <CertLink href={item.verifyUrl} label="Verify" />
           )}
         </div>
       </div>
@@ -479,7 +538,7 @@ function ProjectCard({ item }) {
   );
 }
 
-function CardLink({ href, label, primary }) {
+function CertLink({ href, label, primary }) {
   const [hovered, setHovered] = useState(false);
   return (
     <a
@@ -535,12 +594,12 @@ function EmptyState({ query }) {
           marginBottom: "10px"
         }}
       >
-        {query ? "No results found" : "No projects yet"}
+        {query ? "No results found" : "No certificates yet"}
       </p>
       <p style={{ color: "var(--text-muted)", fontSize: "0.9rem", fontWeight: 300 }}>
         {query
           ? "Try a different search query"
-          : "Projects will appear here once added via the admin panel"}
+          : "Certificates will appear here once added via the admin panel"}
       </p>
     </div>
   );
