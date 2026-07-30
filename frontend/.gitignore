@@ -5,6 +5,9 @@ node_modules/
 .next/
 out/
 
+# ── Firebase build temp folder ───────────────────────────────
+_api_backup_firebase/
+
 # ── Environment files — NEVER commit these ──────────────────
 .env
 .env.local

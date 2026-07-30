@@ -1,547 +1,175 @@
-/* projects/page.jsx — Luxury Jazz Portfolio */
 "use client";
+/* app/projects/page.jsx — Mission Log (Refined Monochrome) */
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import SkeletonCard from "../../components/SkeletonCard";
 import { isSupabaseConfigured, supabase } from "../../lib/supabaseClient";
 
 const ADMIN_PROJECTS_KEY = "ragah_admin_projects_v2";
-
-const parseStorageJson = (value, fallback = []) => {
-  if (!value) return fallback;
-  try {
-    const parsed = JSON.parse(value);
-    return Array.isArray(parsed) ? parsed : fallback;
-  } catch {
-    return fallback;
-  }
+const parseJson = (v, fb = []) => {
+    if (!v) return fb;
+    try { const p = JSON.parse(v); return Array.isArray(p) ? p : fb; }
+    catch { return fb; }
 };
 
-export default function ProjectsPage() {
-  const [query, setQuery] = useState("");
-  const [projects, setProjects] = useState([]);
-  const [modeLabel, setModeLabel] = useState("Local");
-
+/* ── Intersection observer hook for entrance animations ── */
+function useGridReveal(threshold = 0.05) {
+  const ref = useRef(null);
+  const [revealed, setRevealed] = useState(false);
   useEffect(() => {
-    const load = async () => {
-      if (isSupabaseConfigured && supabase) {
-        const { data, error } = await supabase
-          .from("projects")
-          .select("id,name,description,project_type,tech,live_url,repo_url,image_url")
-          .order("created_at", { ascending: false });
-
-        if (!error && data) {
-          setProjects(
-            data.map((item) => ({
-              id: item.id,
-              name: item.name,
-              text: item.description,
-              type: item.project_type,
-              tech: Array.isArray(item.tech) ? item.tech : [],
-              url: item.live_url,
-              github: item.repo_url,
-              image: item.image_url
-            }))
-          );
-          setModeLabel("Supabase");
-          return;
-        }
-      }
-
-      const adminProjects = parseStorageJson(
-        window.localStorage.getItem(ADMIN_PROJECTS_KEY),
-        []
-      );
-      setProjects(adminProjects);
-      setModeLabel("Local");
-    };
-
-    load();
-  }, []);
-
-  useEffect(() => {
-    const onStorageChange = (event) => {
-      if (event.key !== ADMIN_PROJECTS_KEY) return;
-      setProjects(
-        parseStorageJson(window.localStorage.getItem(ADMIN_PROJECTS_KEY), [])
-      );
-    };
-    window.addEventListener("storage", onStorageChange);
-    return () => window.removeEventListener("storage", onStorageChange);
-  }, []);
-
-  const projectItems = projects.map((item, index) => ({
-    id: item.id || `project-${index}`,
-    title: item.name,
-    description: item.text,
-    badge: item.type || "Project",
-    chips: item.tech || [],
-    primaryUrl: item.url,
-    secondaryUrl: item.github,
-    initial: item.name ? item.name.charAt(0).toUpperCase() : String(index + 1)
-  }));
-
-  const filteredItems = projectItems.filter((item) => {
-    if (!query.trim()) return true;
-    const q = query.toLowerCase();
-    return (
-      item.title?.toLowerCase().includes(q) ||
-      item.description?.toLowerCase().includes(q) ||
-      item.chips.join(" ").toLowerCase().includes(q)
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setRevealed(true); obs.unobserve(el); } },
+      { threshold }
     );
-  });
-
-  return (
-    <div
-      style={{
-        minHeight: "100vh",
-        padding: "120px 32px 100px",
-        background: "var(--bg)",
-        position: "relative"
-      }}
-    >
-      {/* Ambient background glow */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: "fixed",
-          inset: 0,
-          background:
-            "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.04) 0%, transparent 70%)",
-          pointerEvents: "none",
-          zIndex: 0
-        }}
-      />
-
-      <div style={{ maxWidth: "1240px", margin: "0 auto", position: "relative", zIndex: 1 }}>
-
-        {/* ── Page Header ── */}
-        <header style={{ textAlign: "center", marginBottom: "64px" }}>
-          <p
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "10px",
-              fontSize: "0.72rem",
-              fontWeight: 600,
-              letterSpacing: "0.22em",
-              textTransform: "uppercase",
-              color: "var(--gold)",
-              marginBottom: "16px"
-            }}
-          >
-            <span style={{ display: "block", width: 28, height: 1, background: "var(--gold)", opacity: 0.6 }} />
-            Portfolio
-            <span style={{ display: "block", width: 28, height: 1, background: "var(--gold)", opacity: 0.6 }} />
-          </p>
-          <h1
-            style={{
-              fontFamily: '"Playfair Display", serif',
-              fontSize: "clamp(2.2rem, 5vw, 3.2rem)",
-              fontWeight: 700,
-              color: "var(--champagne)",
-              letterSpacing: "-0.02em",
-              marginBottom: "16px",
-              lineHeight: 1.1
-            }}
-          >
-            Selected Works
-          </h1>
-          <p
-            style={{
-              color: "var(--text-muted)",
-              fontSize: "1rem",
-              fontWeight: 300,
-              maxWidth: "48ch",
-              margin: "0 auto 32px"
-            }}
-          >
-            A curated collection of projects built with precision and purpose.
-          </p>
-          <div style={{ display: "flex", justifyContent: "center", gap: "12px", flexWrap: "wrap" }}>
-            <a
-              href="/certificates"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 6,
-                padding: "9px 20px",
-                background: "rgba(212,175,55,0.08)",
-                color: "var(--gold)",
-                border: "1px solid rgba(212,175,55,0.3)",
-                borderRadius: "4px",
-                textDecoration: "none",
-                fontSize: "0.8rem",
-                fontWeight: 600,
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                transition: "all 180ms ease"
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = "rgba(212,175,55,0.15)";
-                e.currentTarget.style.borderColor = "var(--gold)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = "rgba(212,175,55,0.08)";
-                e.currentTarget.style.borderColor = "rgba(212,175,55,0.3)";
-              }}
-            >
-              View Certificates
-            </a>
-            <a
-              href="/"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                padding: "9px 20px",
-                background: "transparent",
-                color: "var(--text-muted)",
-                border: "1px solid var(--border)",
-                borderRadius: "4px",
-                textDecoration: "none",
-                fontSize: "0.8rem",
-                fontWeight: 600,
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                transition: "all 180ms ease"
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = "var(--gold)";
-                e.currentTarget.style.borderColor = "rgba(212,175,55,0.3)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = "var(--text-muted)";
-                e.currentTarget.style.borderColor = "var(--border)";
-              }}
-            >
-              ← Back Home
-            </a>
-          </div>
-        </header>
-
-        {/* ── Search ── */}
-        <div
-          style={{
-            display: "flex",
-            gap: "12px",
-            alignItems: "center",
-            marginBottom: "48px",
-            flexWrap: "wrap"
-          }}
-        >
-          <div style={{ flex: 1, position: "relative", minWidth: "240px" }}>
-            <input
-              type="search"
-              placeholder="Search projects by name, description, or tech..."
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "12px 16px 12px 44px",
-                background: "rgba(13,15,24,0.8)",
-                border: "1px solid var(--border)",
-                borderRadius: "8px",
-                color: "var(--text)",
-                fontSize: "0.9rem",
-                backdropFilter: "blur(12px)",
-                outline: "none",
-                transition: "border-color 180ms ease"
-              }}
-              onFocus={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.4)"; }}
-              onBlur={(e) => { e.currentTarget.style.borderColor = "var(--border)"; }}
-            />
-            <span
-              aria-hidden="true"
-              style={{
-                position: "absolute",
-                left: 16,
-                top: "50%",
-                transform: "translateY(-50%)",
-                color: "var(--text-secondary)",
-                fontSize: "0.9rem",
-                pointerEvents: "none"
-              }}
-            >
-              ⌕
-            </span>
-          </div>
-          <span
-            style={{
-              color: "var(--text-secondary)",
-              fontSize: "0.8rem",
-              letterSpacing: "0.06em",
-              whiteSpace: "nowrap"
-            }}
-          >
-            {filteredItems.length} work{filteredItems.length !== 1 ? "s" : ""} · {modeLabel}
-          </span>
-        </div>
-
-        {/* ── Grid ── */}
-        {filteredItems.length > 0 ? (
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))",
-              gap: "28px"
-            }}
-          >
-            {filteredItems.map((item) => (
-              <ProjectCard key={item.id} item={item} />
-            ))}
-          </div>
-        ) : (
-          <EmptyState query={query} />
-        )}
-
-      </div>
-    </div>
-  );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [threshold]);
+  return [ref, revealed];
 }
 
-function ProjectCard({ item }) {
-  const [hovered, setHovered] = useState(false);
+export default function ProjectsPage() {
+    const [query, setQuery] = useState("");
+    const [projects, setProjects] = useState([]);
+    const [modeLabel, setModeLabel] = useState("Local");
+    const [isLoading, setIsLoading] = useState(true);
+    const [gridRef, gridRevealed] = useGridReveal();
 
-  return (
-    <article
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        border: `1px solid ${hovered ? "rgba(212,175,55,0.35)" : "rgba(212,175,55,0.1)"}`,
-        borderRadius: "14px",
-        overflow: "hidden",
-        background: "rgba(13,15,24,0.72)",
-        backdropFilter: "blur(12px)",
-        transition: "all 320ms cubic-bezier(0.16,1,0.3,1)",
-        transform: hovered ? "translateY(-8px)" : "translateY(0)",
-        boxShadow: hovered
-          ? "0 8px 32px rgba(212,175,55,0.15), 0 20px 60px rgba(0,0,0,0.7)"
-          : "0 8px 32px rgba(0,0,0,0.4)"
-      }}
-    >
-      {/* Card image / placeholder */}
-      <div
-        style={{
-          width: "100%",
-          height: "200px",
-          background: hovered
-            ? "linear-gradient(135deg, rgba(212,175,55,0.08), rgba(147,100,220,0.06))"
-            : "linear-gradient(135deg, rgba(212,175,55,0.03), rgba(147,100,220,0.03))",
-          borderBottom: `1px solid ${hovered ? "rgba(212,175,55,0.2)" : "rgba(212,175,55,0.08)"}`,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          transition: "all 320ms ease",
-          position: "relative",
-          overflow: "hidden"
-        }}
-      >
-        {/* Decorative corner lines */}
-        <span
-          aria-hidden="true"
-          style={{
-            position: "absolute",
-            top: 16,
-            left: 16,
-            width: 24,
-            height: 24,
-            borderTop: "1px solid rgba(212,175,55,0.3)",
-            borderLeft: "1px solid rgba(212,175,55,0.3)",
-            opacity: hovered ? 1 : 0.4,
-            transition: "opacity 320ms ease"
-          }}
-        />
-        <span
-          aria-hidden="true"
-          style={{
-            position: "absolute",
-            bottom: 16,
-            right: 16,
-            width: 24,
-            height: 24,
-            borderBottom: "1px solid rgba(212,175,55,0.3)",
-            borderRight: "1px solid rgba(212,175,55,0.3)",
-            opacity: hovered ? 1 : 0.4,
-            transition: "opacity 320ms ease"
-          }}
-        />
-        {/* Initial monogram */}
-        <div
-          style={{
-            width: 80,
-            height: 80,
-            borderRadius: "50%",
-            border: "1px solid rgba(212,175,55,0.2)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontFamily: '"Playfair Display", serif',
-            fontSize: "2rem",
-            fontWeight: 700,
-            color: hovered ? "var(--gold)" : "rgba(212,175,55,0.5)",
-            background: "rgba(212,175,55,0.04)",
-            transition: "all 320ms ease",
-            transform: hovered ? "scale(1.08)" : "scale(1)"
-          }}
-        >
-          {item.initial}
-        </div>
-      </div>
+    useEffect(() => {
+        const load = async () => {
+            setIsLoading(true);
+            if (isSupabaseConfigured && supabase) {
+                const { data, error } = await supabase
+                    .from("projects")
+                    .select("id,name,description,project_type,tech,live_url,repo_url,image_url")
+                    .order("created_at", { ascending: false });
+                if (!error && data) {
+                    setProjects(data.map((i) => ({
+                        id: i.id, name: i.name, text: i.description,
+                        type: i.project_type, tech: Array.isArray(i.tech) ? i.tech : [],
+                        url: i.live_url, github: i.repo_url, image: i.image_url,
+                    })));
+                    setModeLabel("Supabase");
+                    setIsLoading(false);
+                    return;
+                }
+            }
+            if (typeof window !== "undefined")
+                setProjects(parseJson(window.localStorage.getItem(ADMIN_PROJECTS_KEY), []));
+            setModeLabel("Local");
+            setIsLoading(false);
+        };
+        load();
+    }, []);
 
-      {/* Card content */}
-      <div style={{ padding: "24px", flex: 1, display: "flex", flexDirection: "column" }}>
-        <span
-          style={{
-            display: "inline-block",
-            background: "rgba(212,175,55,0.1)",
-            color: "var(--gold)",
-            fontSize: "0.7rem",
-            fontWeight: 700,
-            padding: "3px 10px",
-            borderRadius: "3px",
-            marginBottom: "14px",
-            width: "fit-content",
-            textTransform: "uppercase",
-            letterSpacing: "0.12em"
-          }}
-        >
-          {item.badge}
-        </span>
+    useEffect(() => {
+        const h = (e) => {
+            if (e.key !== ADMIN_PROJECTS_KEY) return;
+            setProjects(parseJson(e.newValue, []));
+        };
+        window.addEventListener("storage", h);
+        return () => window.removeEventListener("storage", h);
+    }, []);
 
-        <h3
-          style={{
-            fontFamily: '"Playfair Display", serif',
-            fontSize: "1.2rem",
-            fontWeight: 700,
-            color: hovered ? "var(--champagne)" : "var(--text)",
-            marginBottom: "10px",
-            lineHeight: 1.3,
-            transition: "color 200ms ease"
-          }}
-        >
-          {item.title}
-        </h3>
+    const items = projects.map((p, i) => ({
+        id: p.id || `p-${i}`,
+        title: p.name || "Untitled",
+        description: p.text || "—",
+        badge: p.type || "Project",
+        chips: Array.isArray(p.tech) ? p.tech : [],
+        primaryUrl: p.url,
+        secondaryUrl: p.github,
+        initial: p.name ? p.name.charAt(0).toUpperCase() : String(i + 1),
+    }));
 
-        <p
-          style={{
-            color: "var(--text-muted)",
-            fontSize: "0.88rem",
-            lineHeight: 1.75,
-            marginBottom: "16px",
-            flex: 1,
-            fontWeight: 300
-          }}
-        >
-          {item.description}
-        </p>
+    const filtered = query.trim()
+        ? items.filter((i) => {
+            const q = query.toLowerCase();
+            return i.title.toLowerCase().includes(q) ||
+                i.description.toLowerCase().includes(q) ||
+                i.chips.join(" ").toLowerCase().includes(q);
+        })
+        : items;
 
-        {/* Tech chips */}
-        {item.chips.length > 0 && (
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginBottom: "16px" }}>
-            {item.chips.map((chip) => (
-              <span
-                key={`${item.id}-${chip}`}
-                style={{
-                  background: "rgba(147,100,220,0.1)",
-                  color: "rgba(180,140,255,0.85)",
-                  fontSize: "0.72rem",
-                  padding: "3px 10px",
-                  borderRadius: "3px",
-                  fontWeight: 500,
-                  letterSpacing: "0.04em"
-                }}
-              >
-                {chip}
-              </span>
-            ))}
-          </div>
-        )}
+    return (
+        <main className="page-shell collection-page">
+            <section className="collection-wrap">
+                <header className="collection-head">
+                    <p className="eyebrow">QUESTS // BATTLE CHRONICLES</p>
+                    <h1 className="section-title-lg">Epic Quests</h1>
+                    <p>Proyek yang ditempa dari konsep hingga deployment — setiap pertempuran adalah mahakarya.</p>
+                    <div className="collection-nav">
+                        <a className="btn btn-primary" href="/certificates">TROPHIES →</a>
+                        <a className="btn btn-ghost" href="/">← OLYMPUS</a>
+                    </div>
+                </header>
 
-        {/* Actions */}
-        <div
-          style={{
-            display: "flex",
-            gap: "10px",
-            borderTop: "1px solid rgba(212,175,55,0.08)",
-            paddingTop: "16px"
-          }}
-        >
-          {item.primaryUrl && (
-            <CardLink href={item.primaryUrl} label="View Live" primary />
-          )}
-          {item.secondaryUrl && (
-            <CardLink href={item.secondaryUrl} label="GitHub" />
-          )}
-        </div>
-      </div>
-    </article>
-  );
-}
+                <div className="collection-search">
+                    <input
+                        type="search"
+                        placeholder="SEARCH QUESTS..."
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                    />
+                    <small>{filtered.length} QUEST{filtered.length !== 1 ? "S" : ""} · {modeLabel.toUpperCase()}</small>
+                </div>
 
-function CardLink({ href, label, primary }) {
-  const [hovered, setHovered] = useState(false);
-  return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noreferrer"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        flex: 1,
-        padding: "9px",
-        textAlign: "center",
-        textDecoration: "none",
-        fontSize: "0.75rem",
-        fontWeight: 600,
-        letterSpacing: "0.08em",
-        textTransform: "uppercase",
-        borderRadius: "4px",
-        transition: "all 180ms ease",
-        color: primary
-          ? hovered ? "#07080d" : "var(--gold)"
-          : hovered ? "var(--gold)" : "var(--text-muted)",
-        border: primary
-          ? `1px solid ${hovered ? "var(--gold)" : "rgba(212,175,55,0.3)"}`
-          : `1px solid ${hovered ? "rgba(212,175,55,0.3)" : "var(--border)"}`,
-        background: primary
-          ? hovered ? "var(--gold)" : "transparent"
-          : hovered ? "rgba(212,175,55,0.05)" : "transparent"
-      }}
-    >
-      {label}
-    </a>
-  );
-}
-
-function EmptyState({ query }) {
-  return (
-    <div
-      style={{
-        textAlign: "center",
-        padding: "80px 20px",
-        background: "rgba(13,15,24,0.6)",
-        border: "1px solid var(--border)",
-        borderRadius: "16px",
-        backdropFilter: "blur(12px)"
-      }}
-    >
-      <p
-        style={{
-          fontFamily: '"Playfair Display", serif',
-          fontSize: "1.4rem",
-          color: "var(--champagne)",
-          marginBottom: "10px"
-        }}
-      >
-        {query ? "No results found" : "No projects yet"}
-      </p>
-      <p style={{ color: "var(--text-muted)", fontSize: "0.9rem", fontWeight: 300 }}>
-        {query
-          ? "Try a different search query"
-          : "Projects will appear here once added via the admin panel"}
-      </p>
-    </div>
-  );
+                {isLoading ? (
+                    <div className="collection-grid">
+                        {[1, 2, 3, 4].map((i) => <SkeletonCard key={i} variant="project" />)}
+                    </div>
+                ) : filtered.length > 0 ? (
+                    <div className="collection-grid" ref={gridRef}>
+                        {filtered.map((item, idx) => (
+                            <article
+                                key={item.id}
+                                className={`collection-card ${gridRevealed ? "reveal" : ""}`}
+                                style={{ transitionDelay: `${idx * 60}ms` }}
+                            >
+                                <div className="collection-cover">
+                                    {item.image ? (
+                                        /* eslint-disable-next-line @next/next/no-img-element */
+                                        <img src={item.image} alt={item.title} className="parallax-zoom" />
+                                    ) : (
+                                        <span>{item.initial}</span>
+                                    )}
+                                </div>
+                                <div className="collection-body">
+                                    <span className="collection-badge">⚔ {item.badge}</span>
+                                    <h3>{item.title}</h3>
+                                    <p>{item.description}</p>
+                                    {item.chips.length > 0 && (
+                                        <div className="collection-chips">
+                                            {item.chips.map((c, ci) => (
+                                                <span key={`${item.id}-${ci}`}>{c}</span>
+                                            ))}
+                                        </div>
+                                    )}
+                                    <div className="collection-actions">
+                                        {item.primaryUrl && (
+                                            <a className="btn btn-primary" href={item.primaryUrl} target="_blank" rel="noreferrer">
+                                                ⚡ LAUNCH
+                                            </a>
+                                        )}
+                                        {item.secondaryUrl && (
+                                            <a className="btn btn-ghost" href={item.secondaryUrl} target="_blank" rel="noreferrer">
+                                                🔱 FORGE
+                                            </a>
+                                        )}
+                                    </div>
+                                </div>
+                            </article>
+                        ))}
+                    </div>
+                ) : (
+                    <section className="collection-empty panel">
+                        <div className="collection-empty-icon">◈</div>
+                        <h2>NO QUESTS FOUND</h2>
+                        <p>{query ? "Ubah kata kunci pencarian." : "Belum ada project. Tambahkan dari admin panel."}</p>
+                    </section>
+                )}
+            </section>
+        </main>
+    );
 }
