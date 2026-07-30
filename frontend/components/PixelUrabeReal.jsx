@@ -52,7 +52,7 @@ export default function PixelUrabeReal() {
         ctx.save();
         ctx.translate(sx, sy);
         ctx.rotate(t * 1.5 + i);
-        ctx.fillStyle = `rgba(200, 200, 255, ${alpha})`;
+        ctx.fillStyle = `rgba(60, 60, 80, ${alpha})`;
         ctx.beginPath();
         for (let p = 0; p < 8; p++) {
           const a = (p / 8) * Math.PI * 2;
@@ -72,7 +72,7 @@ export default function PixelUrabeReal() {
         const progress = (cycle - 5.5) / (Math.PI * 2 - 5.5);
         ctx.beginPath();
         ctx.arc(80, 80, 35 * progress, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255,255,255,${0.4 * (1 - progress)})`;
+        ctx.fillStyle = `rgba(40,40,55,${0.25 * (1 - progress)})`;
         ctx.fill();
       }
     }
@@ -127,7 +127,7 @@ export default function PixelUrabeReal() {
           marginLeft: "-80px",
           width: "160px",
           height: "24px",
-          background: "rgba(0,0,0,0.28)",
+          background: "rgba(0,0,0,0.12)",
           borderRadius: "50%",
           filter: "blur(9px)",
           zIndex: 1,
@@ -144,7 +144,7 @@ export default function PixelUrabeReal() {
           marginLeft: "-100px",
           width: "200px",
           height: "28px",
-          background: "radial-gradient(ellipse, rgba(79,255,192,0.55) 0%, transparent 70%)",
+          background: "radial-gradient(ellipse, rgba(80,80,110,0.2) 0%, transparent 70%)",
           borderRadius: "50%",
           filter: "blur(8px)",
           zIndex: 1,
@@ -162,7 +162,7 @@ export default function PixelUrabeReal() {
           height: "160px",
           pointerEvents: "none",
           zIndex: 4,
-          mixBlendMode: "screen",
+          mixBlendMode: "multiply",
         }}
         aria-hidden="true"
       />
@@ -185,9 +185,9 @@ export default function PixelUrabeReal() {
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            border: "2px dashed rgba(185,103,255,0.5)",
+            border: "2px dashed rgba(80,80,100,0.4)",
             borderRadius: "8px",
-            color: "#b967ff",
+            color: "var(--text-dim)",
             fontFamily: "monospace",
             fontSize: "0.75rem",
             textAlign: "center",
@@ -196,13 +196,13 @@ export default function PixelUrabeReal() {
             padding: "16px",
           }}>
             <span style={{ fontSize: "2rem" }}>⚠️</span>
-            <span style={{ fontWeight: "bold" }}>Gambar tidak ditemukan!</span>
-            <span style={{ color: "#7aada3", fontSize: "0.68rem" }}>
+            <span style={{ fontWeight: "bold", color: "var(--gold)" }}>Gambar tidak ditemukan!</span>
+            <span style={{ color: "var(--text-faint)", fontSize: "0.68rem" }}>
               Taruh file di:<br />
-              <code style={{ color: "#4fffc0" }}>/public/images/urabe-pixel.png</code>
+              <code style={{ color: "var(--gold-dim)" }}>/public/images/urabe-pixel.png</code>
               <br /><br />
               Lalu restart:<br />
-              <code style={{ color: "#4fffc0" }}>npm run dev</code>
+              <code style={{ color: "var(--gold-dim)" }}>npm run dev</code>
             </span>
           </div>
         )}
@@ -232,9 +232,9 @@ export default function PixelUrabeReal() {
             userSelect: "none",
             pointerEvents: "none",
             filter: `
-              drop-shadow(0 0 10px rgba(185,103,255,0.55))
-              drop-shadow(0 0 22px rgba(79,255,192,0.22))
-              drop-shadow(0 10px 18px rgba(0,0,0,0.30))
+              drop-shadow(0 0 10px rgba(40,40,60,0.2))
+              drop-shadow(0 0 22px rgba(60,60,80,0.1))
+              drop-shadow(0 10px 18px rgba(0,0,0,0.12))
             `,
           }}
         />
@@ -247,15 +247,15 @@ export default function PixelUrabeReal() {
           top: "4%",
           left: "50%",
           transform: "translateX(-50%)",
-          background: "rgba(0,0,0,0.82)",
-          border: "1px solid #b967ff",
+          background: "rgba(10,10,18,0.85)",
+          border: "1px solid rgba(201,168,76,0.2)",
           borderRadius: "6px",
           padding: "9px 20px",
           fontFamily: "'Press Start 2P', monospace",
           fontSize: "0.48rem",
-          color: "#b967ff",
-          textShadow: "0 0 10px #b967ff",
-          boxShadow: "0 0 14px rgba(185,103,255,0.35)",
+          color: "var(--white)",
+          textShadow: "none",
+          boxShadow: "0 2px 12px rgba(0,0,0,0.3)",
           whiteSpace: "nowrap",
           textAlign: "center",
           lineHeight: 2.2,
@@ -265,7 +265,7 @@ export default function PixelUrabeReal() {
       >
         URABE MIKOTO
         <br />
-        <span style={{ color: "#d49aff", fontSize: "0.85em" }}>
+        <span style={{ color: "var(--gold)", fontSize: "0.85em" }}>
           ★ MYSTERIOUS COMPANION ★
         </span>
       </div>
