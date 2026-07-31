@@ -1,8 +1,4 @@
 {
-<<<<<<< HEAD
-  "dependencies": {
-    "animejs": "^4.5.0"
-=======
   "name": "profil-ragah-frontend",
   "version": "1.0.0",
   "private": true,
@@ -32,6 +28,5 @@
   "devDependencies": {
     "eslint": "8.57.0",
     "eslint-config-next": "14.2.5"
->>>>>>> fitur-baru
   }
 }
